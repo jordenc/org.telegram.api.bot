@@ -32,10 +32,19 @@ module.exports = [
            
            var http = require('http.min');
            
-           Homey.manager('settings').set('chat_id', '');
+           Homey.log('calling: https://api.telegram.org/bot' + Homey.manager('settings').get('bot_token') + '/setWebhook?url=');
            
-           callback ('Finished', true);
+           http('https://api.telegram.org/bot' + Homey.manager('settings').get('bot_token') + '/setWebhook?url=').then(function (result) {
+	           
+	           Homey.manager('settings').set('bot_token', '');
+	           Homey.manager('settings').set('chat_id', '');
+	           
+	           Homey.log('Code: ' + result.response.statusCode)
+			  	Homey.log('Response: ' + result.data)
+	           
+	           callback ('Finished', true);
                       			
+        	});
         }
     }
 ]

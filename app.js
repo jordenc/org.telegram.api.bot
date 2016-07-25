@@ -123,7 +123,7 @@ function sendchat (message, callback) {
 	
 	var bot_token = Homey.manager('settings').get('bot_token');
 	
-	if (bot_token == undefined) {
+	if (bot_token == undefined || bot_token == '') {
 		Homey.log('No custombot set - using default bot');
 		bot_token = Homey.env.BOT_TOKEN;
 	}

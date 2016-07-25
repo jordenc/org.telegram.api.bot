@@ -26,7 +26,7 @@
 <p>&nbsp;</p>
 
 <div id="delete_bot">
-	<button id="deletebot" data-i18n="delete_bot"></button>
+	<button id="deletebot" data-i18n="settings.delete_bot"></button>
 </div>
 
 <div id="own_bot">
@@ -63,22 +63,28 @@
         
         Homey.get("chat_id", function (err, value) {
 	        
-	        $('#unregistered').css('display', 'none');
-	        $('#registered').css('display', 'block');
+	        if (value) {
+		        $('#unregistered').css('display', 'none');
+				$('#registered').css('display', 'block');
+	        }
 	        
 	    });
 	    
 	     Homey.get("bot_token", function (err, value) {
 	        
-	        if (value) {
+	        if (value && value != '') {
+		        
 		        $('#already_bot').css('display', 'none');
 				$('#own_bot').css('display', 'none');
 				$('#token').val(value);
 				
-				$('#deletebot').css('display', 'none');
+				$('#deletebot').css('display', 'block');
 				
 	        } else {
+		        
 		        $('#already_own_bot').css('display', 'none');
+		        $('#deletebot').css('display', 'none');
+		        
 	        }
 	    });
 	    
@@ -106,8 +112,8 @@
 	    });
 	    
 	    $('#deletebot').on('click', function() {
-		
-			 Homey.api( 'PUT', '/deletebot/', {}, function( msg, result ){
+
+			Homey.api( 'PUT', '/deletebot/', {}, function( msg, result ){
 				
 				if (msg == 'Finished!') {
 					
