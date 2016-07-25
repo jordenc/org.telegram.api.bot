@@ -1,0 +1,96 @@
+{
+    "id": "org.telegram.api.bot",
+    "name": {
+        "en": "Telegram Bot",
+        "nl": "Telegram bot"
+    },
+    "version": "0.0.1",
+    "compatibility": "*",
+	"description": {
+    	"en": "Control Homey by chatting with our Telegram bot",
+		"nl": "Beheer Homey door berichten te sturen naar onze Telegram bot"
+  	},
+  	"author": {
+    	"name": "Chamid Media",
+		"email": "info@chamidmedia.nl"
+  	},
+  	"images": {
+	  	"small": "assets/images/small.png",
+	  	"large": "assets/images/large.png"
+  	},
+  	"permissions": [
+  	],
+  	"speech": [
+  	],
+	"flow": {
+		"triggers": [
+	      {
+	        "id": "event",
+	        "title": {
+	          "en": "On event",
+	          "nl": "Als triggered"
+	        },
+	        "args": [
+	          {
+	            "name": "event",
+	            "type": "text",
+	            "placeholder": {
+	              "en": "Event name",
+	              "nl": "Event naam"
+	            }
+	          }
+	        ],
+	        "tokens": [
+	            {
+	                "name": "data1",
+	                "title": {
+	                    "en": "data1",
+	                    "nl": "data1"
+	                }
+	            },
+	            {
+	                "name": "data2",
+	                "title": {
+	                    "en": "data2",
+	                    "nl": "data2"
+	                }
+	            },
+	            {
+	                "name": "data3",
+	                "title": {
+	                    "en": "data3",
+	                    "nl": "data3"
+	                }
+	            }
+	        ]
+	      }
+	    ],
+	    "actions": [
+        {
+            "id": "sendmessage",
+            "title": {
+                "en": "Send a message",
+                "nl": "Stuur een bericht"
+            },
+            "args": [
+	              {
+		              "name": "mailto",
+		              "type": "text",
+		              "placeholder": {
+			              "en": "Send to",
+			              "nl": "Stuur aan"
+		              }
+	              },
+	              {
+		              "name": "body",
+		              "type": "text",
+		              "placeholder": {
+			              "en": "Message",
+			              "nl": "Bericht"
+		              }
+	              }
+	        ]
+        }
+       ]
+	}
+}

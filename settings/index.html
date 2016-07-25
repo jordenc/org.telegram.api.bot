@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
+</head>
+<body>
+
+<h1 data-i18n="settings.title"></h1>
+
+<div id="unregistered">
+	<p data-i18n="settings.info"></p>
+
+	<input id="device_id" type="text" value="/register 12345">
+</div>
+
+<div id="registered" style="display: none">
+
+	<p data-i18n="settings.already_registered"></p>
+	
+	<input id="device_id_unregister" type="text" value="/unregister 12345">
+
+</div>
+
+<script type="text/javascript">
+
+    // Initialize Homey
+    function onHomeyReady() {
+        Homey.ready();
+
+        // Fill input with already stored settings
+        Homey.get("device_id", function (err, value) {
+            if (value) {
+                document.getElementById('device_id').value = '/register ' + value;
+                document.getElementById('device_id_unregister').value = '/unregister ' + value;
+            }
+        });
+        
+        Homey.get("chat_id", function (err, value) {
+	        
+	        $('#unregistered').css('display', 'none');
+	        $('#registered').css('display', 'block');
+	        
+	    });
+    }
+</script>
+
+</body>
+</html>
