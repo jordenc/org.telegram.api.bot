@@ -1,4 +1,7 @@
 "use strict";
+
+var http = require('http.min');
+
 var webhookID;
 var device_id;
 var chat_id;
@@ -82,36 +85,61 @@ var self = module.exports = {
 	incomingWebhook: function (args) {
 
 		Homey.log('incoming webhook: ' + JSON.stringify(args));
-		
-		/*args.body.chat.:
-				id
-				first_name
-				last_name
-		args.body.text
-		*/
 
-		if (args.body.event == 'register') {
+		if (args.body.message.text.substr(0,10) == '/register ') {
 			
-			Homey.manager('settings').set('chat_id', args.body.chat);
-			Homey.log('chat_id registered: ' + args.body.chat);
+			chat_id = args.body.message.from.id;
+			Homey.manager('settings').set('chat_id', chat_id);
+			Homey.log('chat_id registered: ' + chat_id);
 			self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
 			
-		}else if (args.body.event == 'unregister') {
+			sendchat (__("registered"));
+			
+		}else if (args.body.message.text.substr(0,12) == '/unregister ') {
 			
 			Homey.manager('settings').set('chat_id', '');
+			sendchat (__("unregistered"));
+			chat_id = '';
 			Homey.log('chat_id unregistered');
 			self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
+			
+		} else if (args.body.message.text == 'ping') {
+			
+			sendchat ('pong');
 				
 		} else {
 		
 			// Trigger event
-			Homey.manager('flow').trigger('event', {
-				data1: args.body.query || ''
-			}, {
-				event: args.body.event
+			Homey.manager('flow').trigger('incomingmessage', {
+				message: args.body.message.text || ''
 			});
 			
 		}
 		
 	}
 };
+
+function sendchat (message, callback) {
+	
+	var bot_token = Homey.manager('settings').get('bot_token');
+	
+	if (bot_token == undefined) {
+		Homey.log('No custombot set - using default bot');
+		bot_token = Homey.env.BOT_TOKEN;
+	}
+	
+	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&text=' + message).then(function (result) {
+	  	Homey.log('Code: ' + result.response.statusCode)
+	  	Homey.log('Response: ' + result.data)
+	  	
+	  	if (result.response.statusCode == 200) callback (null, true); else callbcak (result.data, false);
+	});
+
+}
+
+Homey.manager('flow').on('action.sendmessage', function (callback, args) {
+	
+	Homey.log('args='+JSON.stringify(args));
+	sendchat (args.text, callback);
+	
+});

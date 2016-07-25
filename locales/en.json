@@ -2,7 +2,22 @@
 	"settings": {
 		"title": "Setting up Telegram bot",
 		"info": "To register your Homey with your Telegram user ID, please send the message below to <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> on Telegram:",
-		"already_registered": "Your Homey is already registered with the <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> on Telegram. To unregister, send the following command to the bot on Telegram:"
-		
-	}
+		"already_registered": "Your Homey is already registered with the <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> on Telegram. To unregister, send the following command to the bot on Telegram:",
+		"already_registered_own_bot": "Your Homey is already registered with your own custom bot on Telegram. To unregister, send the following command to the bot on Telegram:",
+		"own_bot": "Set up your own bot (optional)",
+		"own_bot_description": "It is possible to set up your own Telegram bot. It is not hard, but it is a little bit more work. However, this makes communication fully secure: if  you use the @athomhomey_bot it is theoretically possible that we read the communication on the bot.<br/>By setting up your own bot, this is not possible.<br/><br/><b>To set up your own bot, follow these steps:</b>",
+		"step1": "1. Open a chat with <a href='https://telegram.me/botfather' target='_blank'>Botfather</a> using the Telegram app.",
+		"step2": "2. Create a new bot with /newbot. It will ask for a name and a username (must end with .....bot).",
+		"step3": "3. When created a <i>token</i> is given to you. Copy the token, save it to the field below.",
+		"step4": "4. Set your privacy settings with /setprivacy (is default on enabled, which is ok, but just to be sure....)",
+		"step5": "5. Use the button below to save this. Homey will connect to the Telegram bot and set a 'webhook' so Homey will be called when the Telegram bot receives a message.",
+		"step6": "6. Send the register command to your Homey bot: <input class='device_id' value='/register 12345'>",
+		"step7": "7. Enjoy this app! <a href='http://www.d2c.nl' target='_blank'>And click here if you wish to buy me a beer for the development of it</a> (fully optional, but greatly appreciated!).",
+		"token": "Token",
+		"save": "Save",
+		"success": "Successfully setup your bot for Homey!",
+		"delete_bot": "Delete the custom bot settings"
+	},
+	"unregistered": "Unregistered succesfully",
+	"registered": "Homey registered to Telegram chat succesfully"
 }
