@@ -22,6 +22,7 @@
   	],
   	"speech": [
   	],
+  	"category": "internet",
 	"flow": {
 		"triggers": [
 	      {
