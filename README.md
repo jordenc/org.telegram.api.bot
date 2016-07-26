@@ -1,6 +1,6 @@
 # Homey Telegram communication
 
-Use Telegram (https://telegram.org/) with Homey: Send an receive messages in flows.
+Use Telegram (https://telegram.org/) with Homey: Send and receive messages in flows.
 
 **Want to show your appreciation for this app? A donation is possible via http://www.d2c.nl **
 
