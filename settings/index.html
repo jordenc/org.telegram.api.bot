@@ -33,18 +33,19 @@
 	<h2 data-i18n="settings.own_bot"></h2>
 	<p data-i18n="settings.own_bot_description"></p>
 	<ul>
-		<li data-i18n="settings.step1"></li>
-		<li data-i18n="settings.step2"></li>
-		<li data-i18n="settings.step3"></li>
-		<li data-i18n="settings.step4"></li>
-		<li data-i18n="settings.step5"></li>
+		<li class='own_bot_1' data-i18n="settings.step1"></li>
+		<li class='own_bot_1' data-i18n="settings.step2"></li>
+		<li class='own_bot_1' data-i18n="settings.step3"></li>
+		<li class='own_bot_1' data-i18n="settings.step4"></li>
+		<li class='own_bot_1' data-i18n="settings.step5"></li>
+		<div  class='own_bot_1'><span data-i18n="settings.token"></span>: <input type="text" name="token" id="token" value=""><button type="submit" id="submit" data-i18n="settings.save"></button></div>
 		<li data-i18n="settings.step6"></li>
 		<li data-i18n="settings.step7"></li>
 		<li data-i18n="settings.step8"></li>
 		
 	</ul>
 	
-	<span data-i18n="settings.token"></span>: <input type="text" name="token" id="token" value=""><button type="submit" id="submit" data-i18n="settings.save"></button>
+	
 
 </div>
 
@@ -100,7 +101,7 @@
 				if (msg == 'Finished!') {
 					Homey.set('bot_token', $('#token').val());
 					
-					$('#own_bot').css('display', 'none');
+					$('.own_bot_1').css('display', 'none');
 					
 					alert (__("settings.success"));
 					
