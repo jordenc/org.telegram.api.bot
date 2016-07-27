@@ -15,5 +15,5 @@ Set up your own Telegram bot. This is fully secure and private, since you are th
 Before you can use this app, you first have to follow the steps on the Settings page in Homey.
 
 # Changelog
-**Version 0.0.1**
+**Version 0.1.0**
 - First released version
