@@ -4,7 +4,7 @@
         "en": "Telegram Bot",
         "nl": "Telegram bot"
     },
-    "version": "0.1.0",
+    "version": "0.1.1",
     "compatibility": "*",
 	"description": {
     	"en": "Control Homey by chatting with our Telegram bot",
