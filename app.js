@@ -91,33 +91,37 @@ var self = module.exports = {
 			
 			last_msg_id = args.body.message.message_id;
 			
-			if (args.body.message.text.substr(0,10) == '/register ') {
+			if (typeof args.body.message.text !== "undefined") {
 				
-				chat_id = args.body.message.from.id;
-				Homey.manager('settings').set('chat_id', chat_id);
-				Homey.log('chat_id registered: ' + chat_id);
-				self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
-				
-				sendchat (__("registered"));
-				
-			}else if (args.body.message.text.substr(0,12) == '/unregister ') {
-				
-				Homey.manager('settings').set('chat_id', '');
-				sendchat (__("unregistered"));
-				chat_id = '';
-				Homey.log('chat_id unregistered');
-				self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
-				
-			} else if (args.body.message.text == 'ping') {
-				
-				sendchat ('pong');
+				if (args.body.message.text.substr(0,10) == '/register ') {
 					
-			} else {
-			
-				// Trigger event
-				Homey.manager('flow').trigger('incomingmessage', {
-					message: args.body.message.text || ''
-				});
+					chat_id = args.body.message.from.id;
+					Homey.manager('settings').set('chat_id', chat_id);
+					Homey.log('chat_id registered: ' + chat_id);
+					self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
+					
+					sendchat (__("registered"));
+					
+				}else if (args.body.message.text.substr(0,12) == '/unregister ') {
+					
+					Homey.manager('settings').set('chat_id', '');
+					sendchat (__("unregistered"));
+					chat_id = '';
+					Homey.log('chat_id unregistered');
+					self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
+					
+				} else if (args.body.message.text == 'ping') {
+					
+					sendchat ('pong');
+						
+				} else {
+				
+					// Trigger event
+					Homey.manager('flow').trigger('incomingmessage', {
+						message: args.body.message.text || ''
+					});
+					
+				}
 				
 			}
 		
