@@ -87,7 +87,9 @@ var self = module.exports = {
 
 		Homey.log('incoming webhook: ' + JSON.stringify(args));
 
-		if (args.body.message.message_id > last_msg_id) {
+		Homey.log ('args.body.message.message_id = ' + args.body.message.message_id);
+		Homey.log ('last_msg_id = ' + last_msg_id);
+		if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
 			
 			last_msg_id = args.body.message.message_id;
 			
