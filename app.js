@@ -115,6 +115,18 @@ var self = module.exports = {
 					
 					Homey.manager('speech-output').say( output );
 					
+				}else if (args.body.message.text.substr(0,5) == '/ask ') {
+					
+					var question = args.body.message.text.substr(5);
+					
+					Homey.manager('speech-input').ask(question, function (err, result) {
+						
+						if( err ) return Homey.error(err);
+						
+						sendchat (result);
+						
+					});
+					
 				}else if (args.body.message.text.substr(0,5) == '/snap') {
 					
 					var camera = args.body.message.text.substr(5);
@@ -139,6 +151,17 @@ var self = module.exports = {
 							
 						});
 						
+						//inline_keyboard gebruiken?
+						/*
+							reply_markup: JSON.stringify({
+							    inline_keyboard: [
+							      [{ text: 'Some button text 1', callback_data: '1' }],
+							      [{ text: 'Some button text 2', callback_data: '2' }],
+							      [{ text: 'Some button text 3', callback_data: '3' }]
+							    ]
+							  })
+						*/
+						
 						
 					} else {
 						
@@ -154,11 +177,6 @@ var self = module.exports = {
 									
 										get_snapshot(device, function (snapshot) {
 											
-											//Homey.log('_____SNAPSHOT: ' + JSON.stringify (snapshot));
-											
-											//first save it to a file? https://developers.athom.com/library/appsettings/
-											//http://stackoverflow.com/questions/13797670/nodejs-post-request-multipart-form-data
-											
 											var bot_token = Homey.manager('settings').get('bot_token');
 	
 											if (bot_token == undefined || bot_token == '') {
@@ -167,9 +185,6 @@ var self = module.exports = {
 											}
 											
 											var request = require('request');
-											//var FormData = require('form-data');
-											
-											//var form = new FormData();
 											
 
 											var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
@@ -179,14 +194,10 @@ var self = module.exports = {
 											
 											form.append('photo', new Buffer(snapshot, 'base64'),
 												{contentType: 'image/jpeg', filename: 'x.jpg'});
-												
-
-											function requestCallback(err, res, body) {
-											  console.log(body);
-											}
-
-    
 											
+											function requestCallback(err, res, body) {
+											  Homey.log(body);
+											}
 											
 											
 										});
