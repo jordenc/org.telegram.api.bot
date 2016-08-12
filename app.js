@@ -90,6 +90,8 @@ var self = module.exports = {
 		//Homey.log ('args.body.message.message_id = ' + args.body.message.message_id);
 		//Homey.log ('last_msg_id = ' + last_msg_id);
 		
+		Homey.log('[INCOMING] ' + JSON.stringify(args));
+		
 		if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
 			
 			last_msg_id = args.body.message.message_id;
@@ -127,6 +129,17 @@ var self = module.exports = {
 						
 					});
 					
+				}else if (args.body.message.text.substr(0,5) == '/test') {
+					
+					sendchat ('TEST BUTTONS', '', JSON.stringify({
+							    inline_keyboard: [
+							      [{ text: 'Some button text 1', callback_data: 'ping' }],
+							      [{ text: 'Some button text 2', callback_data: 'pong' }]
+							    ]
+							  })
+							 );
+
+					
 				}else if (args.body.message.text.substr(0,5) == '/snap') {
 					
 					var camera = args.body.message.text.substr(5);
@@ -150,18 +163,6 @@ var self = module.exports = {
 							});
 							
 						});
-						
-						//inline_keyboard gebruiken?
-						/*
-							reply_markup: JSON.stringify({
-							    inline_keyboard: [
-							      [{ text: 'Some button text 1', callback_data: '1' }],
-							      [{ text: 'Some button text 2', callback_data: '2' }],
-							      [{ text: 'Some button text 3', callback_data: '3' }]
-							    ]
-							  })
-						*/
-						
 						
 					} else {
 						
@@ -223,6 +224,10 @@ var self = module.exports = {
 				} else if (args.body.message.text == 'ping') {
 					
 					sendchat ('pong');
+					
+				} else if (args.body.message.text == 'pong') {
+					
+					sendchat ('ping');
 						
 				} else {
 				
@@ -240,7 +245,7 @@ var self = module.exports = {
 	}
 };
 
-function sendchat (message, callback) {
+function sendchat (message, callback, reply_markup) {
 	
 	var bot_token = Homey.manager('settings').get('bot_token');
 	
@@ -249,7 +254,9 @@ function sendchat (message, callback) {
 		bot_token = Homey.env.BOT_TOKEN;
 	}
 	
-	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message).then(function (result) {
+	if (reply_markup == undefined) reply_markup = '';
+	
+	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message + '&reply_markup=' + reply_markup).then(function (result) {
 	  	Homey.log('Code: ' + result.response.statusCode)
 	  	Homey.log('Response: ' + result.data)
 	  	
