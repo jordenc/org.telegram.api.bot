@@ -87,8 +87,9 @@ var self = module.exports = {
 
 		Homey.log('incoming webhook: ' + JSON.stringify(args));
 
-		Homey.log ('args.body.message.message_id = ' + args.body.message.message_id);
-		Homey.log ('last_msg_id = ' + last_msg_id);
+		//Homey.log ('args.body.message.message_id = ' + args.body.message.message_id);
+		//Homey.log ('last_msg_id = ' + last_msg_id);
+		
 		if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
 			
 			last_msg_id = args.body.message.message_id;
@@ -103,6 +104,102 @@ var self = module.exports = {
 					self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
 					
 					sendchat (__("registered"));
+					
+				}else if (args.body.message.text.substr(0,5) == '/help') {
+					
+					sendchat (__("help"));
+					
+				}else if (args.body.message.text.substr(0,5) == '/say ') {
+					
+					var output = args.body.message.text.substr(5);
+					
+					Homey.manager('speech-output').say( output );
+					
+				}else if (args.body.message.text.substr(0,5) == '/snap') {
+					
+					var camera = args.body.message.text.substr(5);
+					
+					if (camera == "") {
+						
+						sendchat ("*Available options:*\n`/snap <id>`\nReplace <id> with:\n``` <id>     Description```");
+						
+						get_synology_devices(function(external_devices) {
+							
+							//Homey.log('device=' + JSON.stringify(external_devices));
+							external_devices.forEach(function reportdevice(device) {
+						
+								if (device != null) {
+								
+									Homey.log('_____device: ' + JSON.stringify(device));
+									sendchat ('``` ' + device.id + '     ' + device.model + ' (' + device.ipaddress + ')```');
+								
+								}
+								
+							});
+							
+						});
+						
+						
+					} else {
+						
+						Homey.log ('camera #' + camera + ' selected');
+						
+						get_synology_devices(function(external_devices) {
+							
+							external_devices.forEach(function reportdevice(device) {
+						
+								if (device != null) {
+									
+									if (device.id == camera) {
+									
+										get_snapshot(device, function (snapshot) {
+											
+											//Homey.log('_____SNAPSHOT: ' + JSON.stringify (snapshot));
+											
+											//first save it to a file? https://developers.athom.com/library/appsettings/
+											//http://stackoverflow.com/questions/13797670/nodejs-post-request-multipart-form-data
+											
+											var bot_token = Homey.manager('settings').get('bot_token');
+	
+											if (bot_token == undefined || bot_token == '') {
+												Homey.log('No custombot set - using default bot');
+												bot_token = Homey.env.BOT_TOKEN;
+											}
+											
+											var request = require('request');
+											//var FormData = require('form-data');
+											
+											//var form = new FormData();
+											
+
+											var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
+											var form=r.form();
+											
+											form.append('chat_id', chat_id);
+											
+											form.append('photo', new Buffer(snapshot, 'base64'),
+												{contentType: 'image/jpeg', filename: 'x.jpg'});
+												
+
+											function requestCallback(err, res, body) {
+											  console.log(body);
+											}
+
+    
+											
+											
+											
+										});
+										
+									}
+									
+								}
+								
+							});
+							
+						});
+						
+					}
 					
 				}else if (args.body.message.text.substr(0,12) == '/unregister ') {
 					
@@ -141,7 +238,7 @@ function sendchat (message, callback) {
 		bot_token = Homey.env.BOT_TOKEN;
 	}
 	
-	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&text=' + message).then(function (result) {
+	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message).then(function (result) {
 	  	Homey.log('Code: ' + result.response.statusCode)
 	  	Homey.log('Response: ' + result.data)
 	  	
@@ -156,3 +253,61 @@ Homey.manager('flow').on('action.sendmessage', function (callback, args) {
 	sendchat (args.text, callback);
 	
 });
+
+function get_synology_devices(callback) {
+	
+	var api = Homey.manager('api');
+	var app = new api.App('com.synology.surveillance');
+	
+	app.isInstalled( function(err, installed ) {
+		
+	    if( err ) return Homey.log( err ); // returned when no permissions, or anything else broke
+	
+	    if( installed !== true ) {
+
+		    sendchat("Synology app is not installed!");
+		    return false;
+
+		}
+		
+	    // perform a GET request to Synology
+	    app.get('/get_devices', function( err, result ){
+	        
+	        if( err ) return Homey.log('error=' + err);
+	        
+	        callback(result);
+	    
+	    });
+	
+	});
+	
+}
+
+function get_snapshot (device, callback) {
+	
+	var api = Homey.manager('api');
+	var app = new api.App('com.synology.surveillance');
+	
+	app.isInstalled( function(err, installed ) {
+		
+	    if( err ) return Homey.log( err ); // returned when no permissions, or anything else broke
+	
+	    if( installed !== true ) {
+
+		    sendchat("Synology app is not installed!");
+		    return false;
+
+		}
+		
+	    // perform a GET request to Synology
+	    app.get('/get_snapshot/' + device.id, function( err, result ){
+	        
+	        if( err ) return Homey.log('error=' + err);
+	        
+	        callback(result);
+	    
+	    });
+	
+	});
+	
+}

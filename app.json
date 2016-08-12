@@ -4,8 +4,8 @@
         "en": "Telegram Bot",
         "nl": "Telegram bot"
     },
-    "version": "0.1.2",
-    "compatibility": "*",
+    "version": "0.1.3",
+    "compatibility": ">=0.8.34",
 	"description": {
     	"en": "Control Homey by chatting with our Telegram bot",
 		"nl": "Beheer Homey door berichten te sturen naar onze Telegram bot"
@@ -19,6 +19,8 @@
 	  	"large": "assets/images/large.png"
   	},
   	"permissions": [
+	  	"homey:manager:speech-output",
+	  	"homey:app:com.synology.surveillance"
   	],
   	"speech": [
   	],

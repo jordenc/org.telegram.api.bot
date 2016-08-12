@@ -14,7 +14,19 @@ Set up your own Telegram bot. This is fully secure and private, since you are th
 
 Before you can use this app, you first have to follow the steps on the Settings page in Homey.
 
+# Built in commands
+There are several built in commands (and more coming) for you to play with. I plan to extend this app to be able to control a lot of devices/apps on Homey.
+
+As of now, send a message to the Telegram bot:
+- /say ...
+Fill in something on the dots to make Homey say it.
+- /help
+
+
 # Changelog
+**Version 0.1.3**
+- Started on built in commands
+
 **Version 0.1.2**
 - Fixed a bug introduced in version 0.1.1
 

@@ -20,5 +20,6 @@
 		"delete_bot": "Delete the custom bot settings"
 	},
 	"unregistered": "Unregistered succesfully",
-	"registered": "Homey registered to Telegram chat succesfully"
+	"registered": "Homey registered to Telegram chat succesfully",
+	"help": "Helptext coming soon"
 }
