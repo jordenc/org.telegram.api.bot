@@ -132,10 +132,11 @@ var self = module.exports = {
 				}else if (args.body.message.text.substr(0,5) == '/test') {
 					
 					sendchat ('TEST BUTTONS', '', JSON.stringify({
-							    inline_keyboard: [
-							      [{ text: 'Some button text 1', callback_data: 'ping' }],
-							      [{ text: 'Some button text 2', callback_data: 'pong' }]
-							    ]
+							    keyboard: [
+							      ['ping'],
+							      ['pong']
+							    ],
+							    one_time_keyboard: true
 							  })
 							 );
 
@@ -150,17 +151,31 @@ var self = module.exports = {
 						
 						get_synology_devices(function(external_devices) {
 							
+							var keyboard = [];
 							//Homey.log('device=' + JSON.stringify(external_devices));
 							external_devices.forEach(function reportdevice(device) {
 						
 								if (device != null) {
 								
 									Homey.log('_____device: ' + JSON.stringify(device));
-									sendchat ('``` ' + device.id + '     ' + device.model + ' (' + device.ipaddress + ')```');
+									//sendchat ('``` ' + device.id + '     ' + device.model + ' (' + device.ipaddress + ')```');
+									keyboard.push [
+										'/snap ' + device.id + ' (' + device.model + ')'
+									]
 								
 								}
 								
 							});
+							
+							sendchat ('TEST BUTTONS', '', JSON.stringify({
+							    keyboard: [
+							      keyboard
+							    ],
+							    one_time_keyboard: true
+							  })
+							);
+							
+							sendchat ('done');
 							
 						});
 						
