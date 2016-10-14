@@ -143,15 +143,15 @@ var self = module.exports = {
 					
 				}else if (args.body.message.text.substr(0,5) == '/snap') {
 					
-					var camera = args.body.message.text.substr(5);
+					var camera = args.body.message.text.substr(6);
 					
 					if (camera == "") {
 						
-						sendchat ("*Available options:*\n`/snap <id>`\nReplace <id> with:\n``` <id>     Description```");
+						//sendchat ("*Available options:*\n`/snap <id>`\nReplace <id> with:\n``` <id>     Description```");
 						
 						get_synology_devices(function(external_devices) {
 							
-							var keyboard = [];
+							var keyboard = '{"keyboard": [';
 							//Homey.log('device=' + JSON.stringify(external_devices));
 							external_devices.forEach(function reportdevice(device) {
 						
@@ -159,27 +159,27 @@ var self = module.exports = {
 								
 									Homey.log('_____device: ' + JSON.stringify(device));
 									//sendchat ('``` ' + device.id + '     ' + device.model + ' (' + device.ipaddress + ')```');
-									keyboard.push [
-										'/snap ' + device.id + ' (' + device.model + ')'
-									]
+									keyboard = keyboard + '["/snap ' + device.id +' (' + device.model + ')"],'
 								
 								}
 								
 							});
 							
-							sendchat ('TEST BUTTONS', '', JSON.stringify({
-							    keyboard: [
-							      keyboard
-							    ],
-							    one_time_keyboard: true
-							  })
-							);
+							sendchat ('Select the camera you want a screenshot from:', '', keyboard+'["Cancel"]],"one_time_keyboard": true}');
 							
-							sendchat ('done');
+							//sendchat ('done');
 							
 						});
 						
 					} else {
+						
+						var n = camera.indexOf(" ");
+						
+						if (n > 0) {
+							
+							camera = camera.substr(0, n);
+							
+						}
 						
 						Homey.log ('camera #' + camera + ' selected');
 						
