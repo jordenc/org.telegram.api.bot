@@ -20,6 +20,14 @@ There are several built in commands (and more coming) for you to play with. I pl
 As of now, send a message to the Telegram bot:
 - /say ...
 Fill in something on the dots to make Homey say it.
+- /ask ...
+Ask a question via Homey and receive the answer via Telegram
+- /snap
+Shows a list of cameras available if you have the Synology Surveillance Station app installed. Select one and you will receive a snapshot (Might take a few seconds)
+- ping
+Receive 'pong'
+- pong
+Receive 'ping'
 - /help
 
 
