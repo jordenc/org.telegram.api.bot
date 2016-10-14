@@ -147,18 +147,13 @@ var self = module.exports = {
 					
 					if (camera == "") {
 						
-						//sendchat ("*Available options:*\n`/snap <id>`\nReplace <id> with:\n``` <id>     Description```");
-						
 						get_synology_devices(function(external_devices) {
 							
 							var keyboard = '{"keyboard": [';
-							//Homey.log('device=' + JSON.stringify(external_devices));
 							external_devices.forEach(function reportdevice(device) {
 						
 								if (device != null) {
 								
-									Homey.log('_____device: ' + JSON.stringify(device));
-									//sendchat ('``` ' + device.id + '     ' + device.model + ' (' + device.ipaddress + ')```');
 									keyboard = keyboard + '["/snap ' + device.id +' (' + device.model + ')"],'
 								
 								}
@@ -166,8 +161,6 @@ var self = module.exports = {
 							});
 							
 							sendchat ('Select the camera you want a screenshot from:', '', keyboard+'["Cancel"]],"one_time_keyboard": true}');
-							
-							//sendchat ('done');
 							
 						});
 						

@@ -24,6 +24,9 @@ Fill in something on the dots to make Homey say it.
 
 
 # Changelog
+**Version 0.1.4** 
+- It's now possible to retrieve a list of cameras if you have the Synology Surveillance Station app installed on Homey
+
 **Version 0.1.3**
 - Started on built in commands
 
