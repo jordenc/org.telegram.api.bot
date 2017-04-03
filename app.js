@@ -282,6 +282,13 @@ Homey.manager('flow').on('action.sendmessage', function (callback, args) {
 
 Homey.manager('flow').on('action.sendimage', function (callback, args) {
 	
+	var bot_token = Homey.manager('settings').get('bot_token');
+	
+	if (bot_token == undefined || bot_token == '') {
+		Homey.log('No custombot set - using default bot');
+		bot_token = Homey.env.BOT_TOKEN;
+	}
+											
 	var request = require('request');
 	
 	var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
@@ -289,7 +296,7 @@ Homey.manager('flow').on('action.sendimage', function (callback, args) {
 	
 	form.append('chat_id', chat_id);
 	
-	form.append('photo', new Buffer(snapshot, 'base64'),
+	form.append('photo', new Buffer(args.text, 'base64'),
 		{contentType: 'image/jpeg', filename: 'x.jpg'});
 	
 	function requestCallback(err, res, body) {
