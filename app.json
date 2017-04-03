@@ -4,7 +4,7 @@
         "en": "Telegram Bot",
         "nl": "Telegram bot"
     },
-    "version": "0.1.4",
+    "version": "0.1.5",
     "compatibility": ">=0.8.34",
 	"description": {
     	"en": "Control Homey by chatting with our Telegram bot",
@@ -59,6 +59,23 @@
 		              "placeholder": {
 			              "en": "Message",
 			              "nl": "Bericht"
+		              }
+	              }
+	        ]
+        },
+        {
+            "id": "sendimage",
+            "title": {
+                "en": "Send a picture",
+                "nl": "Stuur een afbeelding"
+            },
+            "args": [
+	              {
+		              "name": "text",
+		              "type": "text",
+		              "placeholder": {
+			              "en": "Picture token",
+			              "nl": "Afbeelding token"
 		              }
 	              }
 	        ]

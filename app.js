@@ -280,6 +280,24 @@ Homey.manager('flow').on('action.sendmessage', function (callback, args) {
 	
 });
 
+Homey.manager('flow').on('action.sendimage', function (callback, args) {
+	
+	var request = require('request');
+	
+	var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
+	var form=r.form();
+	
+	form.append('chat_id', chat_id);
+	
+	form.append('photo', new Buffer(snapshot, 'base64'),
+		{contentType: 'image/jpeg', filename: 'x.jpg'});
+	
+	function requestCallback(err, res, body) {
+	  Homey.log(body);
+	}
+	
+});
+											
 function get_synology_devices(callback) {
 	
 	var api = Homey.manager('api');
