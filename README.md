@@ -33,7 +33,7 @@ Receive 'ping'
 
 # Changelog
 **Version 0.1.5** 
-- Building support for sending images via Tokens (For example, Doorbird)
+- Building support for sending images via Tokens (For example, Synology and Doorbird)
 
 **Version 0.1.4** 
 - It's now possible to retrieve a list of cameras if you have the Synology Surveillance Station app installed on Homey
