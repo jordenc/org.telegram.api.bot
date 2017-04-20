@@ -54,6 +54,10 @@ var self = module.exports = {
 			// Register webhook
 			self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
 
+		} else {
+			
+			Homey.log ("Missing env.json ... receiving messages will not work. Sending will only work if using a custombot.")
+			
 		}
 
 	},
@@ -134,6 +138,7 @@ var self = module.exports = {
 					sendchat ('TEST BUTTONS', '', JSON.stringify({
 							    keyboard: [
 							      ['ping'],
+							      ['ping2'],
 							      ['pong']
 							    ],
 							    one_time_keyboard: true
@@ -149,6 +154,8 @@ var self = module.exports = {
 						
 						get_synology_devices(function(external_devices) {
 							
+							Homey.log ('external_devices = ' + JSON.stringify (external_devices));
+							
 							var keyboard = '{"keyboard": [';
 							external_devices.forEach(function reportdevice(device) {
 						
@@ -159,6 +166,8 @@ var self = module.exports = {
 								}
 								
 							});
+							
+							Homey.log ('keyboard = ' + JSON.stringify (keyboard));
 							
 							sendchat ('Select the camera you want a screenshot from:', '', keyboard+'["Cancel"]],"one_time_keyboard": true}');
 							
@@ -355,7 +364,8 @@ function get_snapshot (device, callback) {
 	        
 	        if( err ) return Homey.log('error=' + err);
 	        
-	        callback(result);
+	        sendchat ('error=' + err);
+	        callback(result, false);
 	    
 	    });
 	
