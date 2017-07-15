@@ -262,7 +262,7 @@ var self = module.exports = {
 	}
 };
 
-function sendchat (message, callback, reply_markup) {
+function sendchat (message, callback, reply_markup, to) {
 	
 	var bot_token = Homey.manager('settings').get('bot_token');
 	
@@ -273,7 +273,17 @@ function sendchat (message, callback, reply_markup) {
 	
 	if (reply_markup == undefined) reply_markup = '';
 	
-	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message + '&reply_markup=' + reply_markup).then(function (result) {
+	if (typeof to !== "undefined" && to > 0) {
+		
+		to_id = to;
+		
+	} else {
+		
+		to_id = chat_id;
+		
+	}
+	
+	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + to_id + '&parse_mode=Markdown&text=' + message + '&reply_markup=' + reply_markup).then(function (result) {
 	  	Homey.log('Code: ' + result.response.statusCode)
 	  	Homey.log('Response: ' + result.data)
 	  	
@@ -285,7 +295,7 @@ function sendchat (message, callback, reply_markup) {
 Homey.manager('flow').on('action.sendmessage', function (callback, args) {
 	
 	Homey.log('args='+JSON.stringify(args));
-	sendchat (args.text, callback);
+	sendchat (args.text, callback, false, args.to);
 	
 });
 

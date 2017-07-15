@@ -60,6 +60,14 @@
 			              "en": "Message",
 			              "nl": "Bericht"
 		              }
+	              },
+	              {
+		              "name": "to",
+		              "type": "number",
+		              "placeholder": {
+			              "en": "To ID",
+			              "nl": "Aan ID"
+		              }
 	              }
 	        ]
         },
