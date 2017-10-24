@@ -1,11 +1,12 @@
 {
-    "id": "org.telegram.api.bot",
+    "id": "org.telegram.api.bot.dev",
     "name": {
         "en": "Telegram Bot",
         "nl": "Telegram bot"
     },
-    "version": "0.1.6",
-    "compatibility": ">=0.8.34",
+    "sdk": 2,
+    "version": "0.1.7",
+    "compatibility": ">=1.5.0",
 	"description": {
     	"en": "Control Homey by chatting with our Telegram bot",
 		"nl": "Beheer Homey door berichten te sturen naar onze Telegram bot"
@@ -14,6 +15,14 @@
     	"name": "Chamid Media",
 		"email": "info@chamidmedia.nl"
   	},
+  	  "contributing": {
+	    "donate": {
+	        "paypal": {
+	            "email": "info@chamidmedia.nl",
+	            "currency": "EUR"
+	        }
+	    }
+	},
   	"images": {
 	  	"small": "assets/images/small.png",
 	  	"large": "assets/images/large.png"
@@ -59,14 +68,6 @@
 		              "placeholder": {
 			              "en": "Message",
 			              "nl": "Bericht"
-		              }
-	              },
-	              {
-		              "name": "to",
-		              "type": "number",
-		              "placeholder": {
-			              "en": "To ID",
-			              "nl": "Aan ID"
 		              }
 	              }
 	        ]

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
+	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
 </head>
 <body>
 
@@ -52,7 +53,7 @@
 <script type="text/javascript">
 
     // Initialize Homey
-    function onHomeyReady() {
+    function onHomeyReady(Homey) {
         Homey.ready();
 
         // Fill input with already stored settings

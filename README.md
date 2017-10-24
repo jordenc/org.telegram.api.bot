@@ -32,6 +32,9 @@ Receive 'ping'
 
 
 # Changelog
+**Version 0.1.7**
+- Homey SDK v2 version
+
 **Version 0.1.6** 
 - Small update that sends an error to the chat if snapshotting via Synology does not work.
 
