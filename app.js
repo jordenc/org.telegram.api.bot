@@ -20,7 +20,7 @@ class App extends Homey.App {
 		    .registerRunListener( (args, state ) => {
 
 		        // If true, this flow should run
-		        return Promise.resolve( args.location === state.location );
+		        return Promise.resolve(true);
 		
 		    })
 		    
@@ -56,6 +56,7 @@ class App extends Homey.App {
 			    .register()
 			    .registerRunListener(( args, state ) => {
 			
+					this.log('[SEND CHAT] ' + JSON.stringify (args));
 					sendchat (args.text, false, args.to);
 					
 			    })
@@ -65,20 +66,32 @@ class App extends Homey.App {
 				.register()
 				.registerRunListener(( args, state) => {
 					
-					var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
-					var form = r.form();
+					this.log ("[SEND IMAGE] " + JSON.stringify (args));
 					
-					form.append('chat_id', chat_id);
-					
-					form.append('photo', new Buffer(args.text, 'base64'),
-						{contentType: 'image/jpeg', filename: 'x.jpg'});
-					
-					function requestCallback(err, res, body) {
-					  this.log(body);
-					}
-
-					return Promise.resolve(true);
-					
+					let image = args.droptoken;
+					image.getBuffer()
+					.then( buf => {
+						
+						var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
+						var form = r.form();
+						
+						form.append('chat_id', chat_id);
+						
+						form.append('photo', new Buffer(buf),
+							{contentType: 'image/jpeg', filename: 'x.jpg'});
+						
+						function requestCallback(err, res, body) {
+						  console.log(body);
+						  
+						  if (body.ok == true) {
+							  return Promise.resolve(true);
+						  } else {
+							  return Promise.resolve(false);
+						  }
+						}
+					  
+					})
+					.catch (this.log("sendimage done"))					
 				})
 			
 			// Register initial webhook
@@ -106,10 +119,10 @@ class App extends Homey.App {
 							if (args.body.message.text.substr(0,10) == '/register ') {
 								
 								chat_id = args.body.message.from.id;
-								//Homey.manager('settings').set('chat_id', chat_id);
 								Homey.ManagerSettings.set('chat_id', chat_id);
 								this.log('chat_id registered: ' + chat_id);
-								//self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
+								
+								//chat_ids[chat_id] = Object.assign({}, chat_id); 
 								
 								sendchat (Homey.__("registered"));
 								
@@ -121,19 +134,22 @@ class App extends Homey.App {
 								
 								var output = args.body.message.text.substr(5);
 								
-								Homey.manager('speech-output').say( output );
+								this.log ('test van SAY function: ' + output);
+								
+								Homey.ManagerSpeechOutput.say( output );
 								
 							}else if (args.body.message.text.substr(0,5) == '/ask ') {
 								
 								var question = args.body.message.text.substr(5);
 								
-								Homey.manager('speech-input').ask(question, function (err, result) {
-									
-									if( err ) return Homey.error(err);
-									
-									sendchat (result);
-									
-								});
+								/*
+								Homey.ManagerSpeechOutput.ask( question )
+									.then() {
+										
+										sendchat (result);
+										
+									};
+								*/
 								
 							} else if (args.body.message.text.substr(0,12) == '/unregister ') {
 								

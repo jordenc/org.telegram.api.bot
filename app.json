@@ -29,8 +29,7 @@
   	},
   	"permissions": [
 	  	"homey:manager:speech-output",
-	  	"homey:manager:speech-input",
-	  	"homey:app:com.synology.surveillance"
+	  	"homey:manager:speech-input"
   	],
   	"speech": [
   	],
@@ -78,16 +77,7 @@
                 "en": "Send a picture",
                 "nl": "Stuur een afbeelding"
             },
-            "args": [
-	              {
-		              "name": "text",
-		              "type": "text",
-		              "placeholder": {
-			              "en": "Picture token",
-			              "nl": "Afbeelding token"
-		              }
-	              }
-	        ]
+            "droptoken": "image"
         }
        ]
 	}

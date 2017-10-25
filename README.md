@@ -33,6 +33,7 @@ Receive 'ping'
 
 # Changelog
 **Version 0.1.7**
+- Support for "official" Homey image tokens
 - Homey SDK v2 version
 
 **Version 0.1.6** 
