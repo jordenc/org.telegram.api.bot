@@ -22,5 +22,7 @@
 	},
 	"unregistered": "Unregistered succesfully",
 	"registered": "Homey registered to Telegram chat succesfully",
-	"help": "Helptext coming soon"
+	"help": "Helptext coming soon",
+	"group": "Group",
+	"already_registered": "This chat is already registered to Homey"
 }

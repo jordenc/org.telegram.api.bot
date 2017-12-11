@@ -22,5 +22,7 @@
 	},
 	"unregistered": "Loskoppelen is gelukt",
 	"registered": "Homey is succesvol aan de Telegram chat gekoppeld",
-	"help": "Helptekst komt binnenkort!"
+	"help": "Helptekst komt binnenkort!",
+	"group": "Groep",
+	"already_registered": "Deze chat is reeds gekoppeld aan Homey"
 }

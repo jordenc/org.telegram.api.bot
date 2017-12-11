@@ -22,8 +22,6 @@ As of now, send a message to the Telegram bot:
 Fill in something on the dots to make Homey say it.
 - /ask ...
 Ask a question via Homey and receive the answer via Telegram
-- /snap
-Shows a list of cameras available if you have the Synology Surveillance Station app installed. Select one and you will receive a snapshot (Might take a few seconds)
 - ping
 Receive 'pong'
 - pong
@@ -32,9 +30,11 @@ Receive 'ping'
 
 
 # Changelog
-**Version 0.1.7**
+**Version 0.2.0**
+- Giant new release with new functionality
 - Support for "official" Homey image tokens
 - Homey SDK v2 version
+- This update breaks your flows from the previous version.
 
 **Version 0.1.6** 
 - Small update that sends an error to the chat if snapshotting via Synology does not work.
