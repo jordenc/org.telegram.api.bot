@@ -19,12 +19,10 @@
 	<p id="already_bot" data-i18n="settings.already_registered"></p>
 	
 	<p id="already_own_bot" data-i18n="settings.already_registered_own_bot"></p>
-	
-	<input id="device_id_unregister" type="text" value="/unregister 12345">
 
 </div>
 
-<p>&nbsp;</p>
+<hr>
 
 <div id="delete_bot">
 	<button id="deletebot" data-i18n="settings.delete_bot"></button>
@@ -50,6 +48,16 @@
 
 </div>
 
+<hr>
+
+<div id="connected_users">
+	
+	<h2 data-i18n="settings.connected_users"></h2>
+	
+	<div id="connected_users_list"></div>
+	
+</div>
+
 <script type="text/javascript">
 
     // Initialize Homey
@@ -73,7 +81,7 @@
 	        
 	    });
 	    
-	     Homey.get("bot_token", function (err, value) {
+	    Homey.get("bot_token", function (err, value) {
 	        
 	        if (value && value != '') {
 		        
@@ -91,6 +99,58 @@
 	        }
 	    });
 	    
+	    Homey.get("chat_ids", function (err, chat_ids) {
+		    
+		    for (var key in chat_ids) {
+			    
+			    var html = '<span class="span_' + key + '"> ' + chat_ids[key].name + ' ';
+			    if (typeof chat_ids[key].description !== 'undefined') {
+				    
+				    html += ' (Group) ';
+				    
+			    }
+			    html += '<a href="#" class="delete" data-id="' + key + '">' + __('settings.delete') + '</a>';
+				html += '</span><br/>';
+				
+				$('#connected_users_list').append (html);
+				
+			}
+		    
+		});
+		
+		$('body').on('click', '.delete', function () {
+			
+			var remove_key = $(this).data('id');
+			
+			Homey.confirm (__("settings.are_you_sure"), "warning", function(err, result) {
+				
+				if (result) {
+					
+					$('.span_' + remove_key).remove();
+					
+					Homey.get("chat_ids", function (err, chat_ids) {
+						
+						console.log (typeof remove_key + ' = ' + remove_key);
+						console.log('chat_ids is type: ' + typeof chat_ids);
+						
+						chat_ids.splice[remove_key, 1];
+						
+						console.log ('chat_ids = ' + JSON.stringify (chat_ids));
+						
+						Homey.set("chat_ids", chat_ids, function() {
+							
+							Homey.alert("saved");
+							
+						});
+					
+					});
+				
+				}
+				
+			});
+			
+		});
+	    
 	    $('#submit').on('click', function() {
 		
 			 Homey.api( 'PUT', '/addbot/', {
@@ -104,10 +164,10 @@
 					
 					$('.own_bot_1').css('display', 'none');
 					
-					alert (__("settings.success"));
+					Homey.alert (__("settings.success"));
 					
 				} else {
-					alert (msg);
+					Homey.alert(msg);
 				}
 				
 			});
