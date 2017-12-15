@@ -103,14 +103,14 @@
 		    
 		    for (var key in chat_ids) {
 			    
-			    var html = '<span class="span_' + key + '"> ' + chat_ids[key].name + ' ';
+			    var html = '<div class="span_' + key + '"> ' + chat_ids[key].name + ' ';
 			    if (typeof chat_ids[key].description !== 'undefined') {
 				    
 				    html += ' (Group) ';
 				    
 			    }
 			    html += '<a href="#" class="delete" data-id="' + key + '">' + __('settings.delete') + '</a>';
-				html += '</span><br/>';
+				html += '</div>';
 				
 				$('#connected_users_list').append (html);
 				
@@ -130,16 +130,20 @@
 					
 					Homey.get("chat_ids", function (err, chat_ids) {
 						
-						console.log (typeof remove_key + ' = ' + remove_key);
-						console.log('chat_ids is type: ' + typeof chat_ids);
+						console.log ('chat_ids = ' + JSON.stringify(chat_ids));
+
+						//var new_chat_ids = Object.assign ({}, chat_ids);
 						
-						chat_ids.splice[remove_key, 1];
+						//console.log ('new_chat_ids BEFORE = ' + JSON.stringify(new_chat_ids));
+					
+						//delete chat_ids[remove_key];
+						chat_ids.splice(remove_key, 1);
 						
-						console.log ('chat_ids = ' + JSON.stringify (chat_ids));
+						console.log ('chat_ids AFTER = ' + JSON.stringify(chat_ids));
 						
 						Homey.set("chat_ids", chat_ids, function() {
 							
-							Homey.alert("saved");
+							//Homey.alert("saved");
 							
 						});
 					

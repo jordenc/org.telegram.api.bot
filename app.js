@@ -6,11 +6,9 @@ let request		=	require('request');
 
 let device_id 	=	Homey.ManagerSettings.get('device_id');
 let bot_token	=	Homey.env.BOT_TOKEN;
-let chat_ids 	=	Homey.ManagerSettings.get('chat_ids');
+let chat_ids 	=	[];
 
 let custom_bot_token 	=	Homey.ManagerSettings.get('bot_token');
-
-let found		=	0;
 
 //Homey.ManagerSettings.get('chat_ids');
 
@@ -20,6 +18,8 @@ var last_msg_id;
 class App extends Homey.App {
 	
 	onInit() {
+		
+		chat_ids = Homey.ManagerSettings.get('chat_ids');
 		
 		if (typeof chat_ids != "object") {
 			this.log ('Not yet registered with chat_ids');
@@ -137,12 +137,12 @@ class App extends Homey.App {
 						
 						if (args.body.message.text.substr(0,10) == '/register ') {
 							
-							this.log ('[args] ' + JSON.stringify (args));
-							
-							found = 0;
+							chat_ids = Homey.ManagerSettings.get('chat_ids');
 							
 							//See if it is not yet in the list of chat_ids:
-							let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id + 1);
+							let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
+							
+							this.log ("typeof obj is: " + typeof obj);
 							
 							if (typeof obj === "undefined") {
 							
@@ -203,14 +203,6 @@ class App extends Homey.App {
 									
 								};
 							*/
-							
-						} else if (args.body.message.text.substr(0,12) == '/unregister ') {
-							
-							Homey.manager('settings').set('chat_id', '');
-							sendchat (Homey.__("unregistered"), args.body.message.chat.id);
-							chat_id = '';
-							this.log('chat_id unregistered');
-							self.registerWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET);
 							
 						} else if (args.body.message.text == 'ping') {
 							this.log ('[args] ' + JSON.stringify(args));
