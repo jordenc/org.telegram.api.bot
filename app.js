@@ -132,11 +132,6 @@ class App extends Homey.App {
 			myWebhook
 			.on('message', args => {
 				
-				this.log('incoming webhook: ' + JSON.stringify(args));
-		
-				//this.log ('args.body.message.message_id = ' + args.body.message.message_id);
-				//this.log ('last_msg_id = ' + last_msg_id);
-				
 				this.log('[INCOMING] ' + JSON.stringify(args));
 				
 				if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
@@ -260,10 +255,10 @@ function sendchat (message, chat_id) {
 
 	var custom_bot = Homey.ManagerSettings.get('bot_token');
 	
-	if (custom_bot !== null) {
+	if (custom_bot !== null && custom_bot != '' && typeof custom_bot != 'undefined') {
 		
 		bot_token = custom_bot;
-		 
+		
 	} else {
 		
 		bot_token = Homey.env.BOT_TOKEN;
