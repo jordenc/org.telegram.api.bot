@@ -21,6 +21,16 @@ class App extends Homey.App {
 		
 		chat_ids = Homey.ManagerSettings.get('chat_ids');
 		
+		var custom_bot = Homey.ManagerSettings.get('bot_token');
+		
+		this.log ("custom_bot = " + typeof custom_bot + " / " + JSON.stringify (custom_bot));
+		
+		if (custom_bot !== null) {
+			
+			bot_token = custom_bot;
+			
+		}
+		
 		if (typeof chat_ids != "object") {
 			this.log ('Not yet registered with chat_ids');
 			chat_ids = [];
@@ -195,14 +205,12 @@ class App extends Homey.App {
 							
 							var question = args.body.message.text.substr(5);
 							
-							/*
-							Homey.ManagerSpeechOutput.ask( question )
-								.then() {
-									
-									sendchat (result, args.body.message.chat.id);
-									
-								};
-							*/
+							speech.ask(question, function( err, result ) {
+						        if( err ) return Homey.error(err);
+						        
+						        sendchat (result, args.body.message.chat.id);
+						
+						    });
 							
 						} else if (args.body.message.text == 'ping') {
 							this.log ('[args] ' + JSON.stringify(args));
@@ -250,6 +258,17 @@ class App extends Homey.App {
 
 function sendchat (message, chat_id) {
 
+	var custom_bot = Homey.ManagerSettings.get('bot_token');
+	
+	if (custom_bot !== null) {
+		
+		bot_token = custom_bot;
+		 
+	} else {
+		
+		bot_token = Homey.env.BOT_TOKEN;
+	
+	}
 	
 	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message).then(function (result) {
 	  	console.log('Code: ' + result.response.statusCode)

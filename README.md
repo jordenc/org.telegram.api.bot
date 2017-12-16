@@ -34,6 +34,8 @@ Receive 'ping'
 - Giant new release with new functionality
 - Support for "official" Homey image tokens
 - Homey SDK v2 version
+- Support for multiple chat ID's
+- Support for group chats
 - This update breaks your flows from the previous version.
 
 **Version 0.1.6** 

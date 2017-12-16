@@ -1,8 +1,7 @@
 {
 	"settings": {
 		"title": "Instellen van uw Telegram bot",
-		"info": "Om Homey met uw Telegram user ID te registreren, stuurt u het bericht hieronder naar de <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> op Telegram:",
-		"already_registered": "Uw Homey is reeds geregistreerd met de <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> op Telegram. Om deze los te koppelen, stuurt u het volgende bericht naar de bot op Telegram:",
+		"info": "Om Homey met uw Telegram user(s) of groep(en) te registreren, stuurt u het bericht hieronder naar de <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> op Telegram:",
 		"already_registered_own_bot": "Uw Homey is reeds geregistreerd met uw eigen bot op Telegram.",
 		"own_bot": "Eigen bot opzetten (optioneel)",
 		"own_bot_description": "Het is mogelijk om uw eigen Telegram bot op te zetten. Dit is niet lastig, maar wel iets meer werk. Het maakt de communicatie volledig veilig: Als u de @athomhomey_bot gebruikt is het theoretisch mogelijk dat wij de communicatie met de bot lezen.<br/>Door uw eigen bot op te zetten is dit niet mogelijk.<br/><br/><b>Om uw eigen bot op te zetten volgt u deze stappen:</b>",
@@ -21,7 +20,8 @@
 		"delete_bot": "Verwijder de eigen bot instellingen",
 		"connected_users": "Gekoppelde gebruikers/groepen",
 		"delete": "Verwijder",
-		"are_you_sure": "Weet je zeker dat je deze gebruiker/groep wilt ontkoppelen?"
+		"are_you_sure": "Weet je zeker dat je deze gebruiker/groep wilt ontkoppelen?",
+		"are_you_sure_bot": "Weet je zeker dat je deze bot wilt ontkoppelen?"
 	},
 	"unregistered": "Loskoppelen is gelukt",
 	"registered": "Homey is succesvol aan de Telegram chat gekoppeld",

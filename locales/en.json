@@ -1,8 +1,7 @@
 {
 	"settings": {
 		"title": "Setting up Telegram bot",
-		"info": "To register your Homey with your Telegram user ID, please send the message below to <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> on Telegram:",
-		"already_registered": "Your Homey is already registered with the <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> on Telegram. To unregister, send the following command to the bot on Telegram:",
+		"info": "To register your Homey with your Telegram user(s) or group(s), please send the message below to <a href='http://telegram.me/athomhomey_bot' target='_blank'>@athomhomey_bot</a> on Telegram:",
 		"already_registered_own_bot": "Your Homey is already registered with your own custom bot on Telegram.",
 		"own_bot": "Set up your own bot (optional)",
 		"own_bot_description": "It is possible to set up your own Telegram bot. It is not hard, but it is a little bit more work. However, this makes communication fully secure: if  you use the @athomhomey_bot it is theoretically possible that we read the communication on the bot.<br/>By setting up your own bot, this is not possible.<br/><br/><b>To set up your own bot, follow these steps:</b>",
@@ -21,7 +20,8 @@
 		"delete_bot": "Delete the custom bot settings",
 		"connected_users": "Connected users/groups",
 		"delete": "Delete",
-		"are_you_sure": "Are you sure you wish to disconnect this user/group?"
+		"are_you_sure": "Are you sure you wish to disconnect this user/group?",
+		"are_you_sure_bot": "Are you sure you wish to disconnect this bot?"
 	},
 	"unregistered": "Unregistered succesfully",
 	"registered": "Homey registered to Telegram chat succesfully",

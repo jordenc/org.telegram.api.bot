@@ -14,14 +14,7 @@
 	<input class="device_id" type="text" value="/register 12345">
 </div>
 
-<div id="registered" style="display: none">
-
-	<p id="already_bot" data-i18n="settings.already_registered"></p>
-	
-	<p id="already_own_bot" data-i18n="settings.already_registered_own_bot"></p>
-
-</div>
-
+&nbsp;<br/>
 <hr>
 
 <div id="delete_bot">
@@ -37,17 +30,15 @@
 		<li class='own_bot_1' data-i18n="settings.step3"></li>
 		<li class='own_bot_1' data-i18n="settings.step4"></li>
 		<li class='own_bot_1' data-i18n="settings.step5"></li>
-		<div  class='own_bot_1'><span data-i18n="settings.token"></span>: <input type="text" name="token" id="token" value=""><button type="submit" id="submit" data-i18n="settings.save"></button></div>
-		<li data-i18n="settings.step6"></li>
+		<div class='own_bot_1'><span data-i18n="settings.token"></span>: <input type="text" name="token" id="token" value=""><button type="submit" id="submit" data-i18n="settings.save"></button></div>
+		<li class='own_bot_1' data-i18n="settings.step6"></li>
 		<li data-i18n="settings.step7"></li>
 		<li data-i18n="settings.step8"></li>
 		
 	</ul>
-	
-	
-
 </div>
 
+&nbsp;<br/>
 <hr>
 
 <div id="connected_users">
@@ -68,18 +59,8 @@
         Homey.get("device_id", function (err, value) {
             if (value) {
                 $('.device_id').val('/register ' + value);
-                $('#device_id_unregister').val('/unregister ' + value);
             }
         });
-        
-        Homey.get("chat_id", function (err, value) {
-	        
-	        if (value) {
-		        $('#unregistered').css('display', 'none');
-				$('#registered').css('display', 'block');
-	        }
-	        
-	    });
 	    
 	    Homey.get("bot_token", function (err, value) {
 	        
@@ -179,15 +160,25 @@
 	    });
 	    
 	    $('#deletebot').on('click', function() {
-
-			Homey.api( 'PUT', '/deletebot/', {}, function( msg, result ){
+		
+			Homey.confirm (__("settings.are_you_sure_bot"), "warning", function(err, result) {
 				
-				if (msg == 'Finished!') {
+				if (result) {
 					
-					$('#own_bot').css('display', 'true');
-					$('#delete_bot').css('display', 'none');
-					$('#token').val('');
-					
+					Homey.api( 'PUT', '/deletebot/', {}, function( msg, result ){
+						
+						console.log (msg + ' / result = ' + result);
+						
+						if (msg == 'Finished') {
+							
+							$('#own_bot').css('display', 'block');
+							$('#delete_bot').css('display', 'none');
+							$('#token').val('');
+							
+						}
+						
+					});
+				
 				}
 				
 			});
