@@ -102,8 +102,28 @@ class App extends Homey.App {
 					
 					form.append('chat_id', args.to.chat_id);
 					
-					form.append('photo', new Buffer(buf),
-						{contentType: 'image/jpeg', filename: 'x.jpg'});
+					if (image.getFormat() == "jpg") {
+						
+						this.log ("jpg");
+
+						return form.append('photo', new Buffer(buf),
+							{contentType: 'image/jpeg', filename: 'x.jpg'});
+							
+					} else if (image.getFormat() == "gif") {
+						
+						this.log ("gif");
+						
+						form.append('photo', new Buffer(buf),
+							{contentType: 'image/gif', filename: 'x.gif'});
+						
+					} else if (image.getFormat() == "png") {
+						
+						this.log ("png");
+						
+						form.append('photo', new Buffer(buf),
+							{contentType: 'image/png', filename: 'x.png'});
+							
+					}
 					
 					function requestCallback(err, res, body) {
 					  console.log(body);
