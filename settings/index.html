@@ -113,19 +113,20 @@
 						
 						console.log ('chat_ids = ' + JSON.stringify(chat_ids));
 
-						//var new_chat_ids = Object.assign ({}, chat_ids);
-						
-						//console.log ('new_chat_ids BEFORE = ' + JSON.stringify(new_chat_ids));
-					
-						//delete chat_ids[remove_key];
 						chat_ids.splice(remove_key, 1);
 						
 						console.log ('chat_ids AFTER = ' + JSON.stringify(chat_ids));
 						
 						Homey.set("chat_ids", chat_ids, function() {
 							
-							//Homey.alert("saved");
-							
+							Homey.api('PUT', '/renew_webhook', {}, function( err, result ) {
+							    
+							    if( err ) return Homey.alert(err);
+							    
+							    //Homey.alert ("result = " + result);
+							    
+							});
+
 						});
 					
 					});

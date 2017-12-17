@@ -125,121 +125,8 @@ class App extends Homey.App {
 		
 		// Register initial webhook
 		if (Homey.env.CLIENT_ID && Homey.env.CLIENT_SECRET) {
-
-			// Register webhook
-			let myWebhook = new Homey.CloudWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET, {device_id: device_id});
-			
-			myWebhook
-			.on('message', args => {
-				
-				this.log('[INCOMING] ' + JSON.stringify(args));
-				
-				if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
-					
-					last_msg_id = args.body.message.message_id;
-					
-					if (typeof args.body.message.text !== "undefined") {
-						
-						if (args.body.message.text.substr(0,10) == '/register ') {
-							
-							chat_ids = Homey.ManagerSettings.get('chat_ids');
-							
-							//See if it is not yet in the list of chat_ids:
-							let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
-							
-							this.log ("typeof obj is: " + typeof obj);
-							
-							if (typeof obj === "undefined") {
-							
-								if (typeof args.body.message.chat.type !== undefined && args.body.message.chat.type == 'group') {
-									
-									chat_ids.push({
-					                    image: 'https://telegram.org/img/t_logo.png', 
-					                    name: args.body.message.chat.title,
-					                    description: Homey.__("group"),
-					                    chat_id: args.body.message.chat.id
-					                });
-				                
-								} else {
-									
-									chat_ids.push({
-					                    image: 'https://telegram.org/img/t_logo.png', 
-					                    name: args.body.message.from.first_name + ' ' + args.body.message.from.last_name,
-					                    chat_id: args.body.message.chat.id
-					                });
-					                
-					            }
-				            
-					            this.log('chat_id added: ' + args.body.message.chat.id);
-			                
-				                Homey.ManagerSettings.set('chat_ids', chat_ids);
-				                
-				                this.log ('[chat_ids] ' + JSON.stringify(chat_ids));
-								
-								sendchat (Homey.__("registered"), args.body.message.chat.id);
-							
-							} else {
-								
-								sendchat (Homey.__("already_registered"), args.body.message.chat.id);
-								
-							}
-							
-						}else if (args.body.message.text.substr(0,5) == '/help') {
-							
-							sendchat (Homey.__("help"), args.body.message.chat.id);
-							
-						}else if (args.body.message.text.substr(0,5) == '/say ') {
-							
-							var output = args.body.message.text.substr(5);
-							
-							this.log ('test van SAY function: ' + output);
-							
-							Homey.ManagerSpeechOutput.say( output );
-							
-						}else if (args.body.message.text.substr(0,5) == '/ask ') {
-							
-							var question = args.body.message.text.substr(5);
-							
-							speech.ask(question, function( err, result ) {
-						        if( err ) return Homey.error(err);
-						        
-						        sendchat (result, args.body.message.chat.id);
-						
-						    });
-							
-						} else if (args.body.message.text == 'ping') {
-							this.log ('[args] ' + JSON.stringify(args));
-							sendchat ('pong', args.body.message.chat.id);
-							
-						} else if (args.body.message.text == 'pong') {
-							
-							sendchat ('ping', args.body.message.chat.id);
-								
-						} else {
-						
-							// Trigger event
-							incomingMessage
-				        	.trigger({
-				                message: args.body.message.text || ''
-			                }, {event: event})
-			                .then( console.log( 'incomingmessage triggered') )
-			                .catch( this.error )
-	                
-	                
-							
-						}
-						
-					}
-				
-				}
-				
-			 })
-	        .register()
-	        .then(() => {
-	             this.log('Webhook registered!');
-	             
-			})
-	        .catch( this.error )
+		
+			this.register_webhook();
     
 		} else {
 			
@@ -247,6 +134,130 @@ class App extends Homey.App {
 			
 		}
 
+	}
+	
+	register_webhook(){
+		
+		chat_ids = Homey.ManagerSettings.get('chat_ids');
+		
+		let data = {
+			device_id: device_id,
+			chat_ids: chat_ids
+		}
+		
+		// Register webhook
+		let myWebhook = new Homey.CloudWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET, data);
+		
+		myWebhook
+		.on('message', args => {
+			
+			this.log('[INCOMING] ' + JSON.stringify(args));
+			
+			if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
+				
+				last_msg_id = args.body.message.message_id;
+				
+				if (typeof args.body.message.text !== "undefined") {
+					
+					if (args.body.message.text.substr(0,10) == '/register ') {
+						
+						chat_ids = Homey.ManagerSettings.get('chat_ids');
+						
+						//See if it is not yet in the list of chat_ids:
+						let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
+						
+						this.log ("typeof obj is: " + typeof obj);
+						
+						if (typeof obj === "undefined") {
+						
+							if (typeof args.body.message.chat.type !== undefined && args.body.message.chat.type == 'group') {
+								
+								chat_ids.push({
+				                    image: 'https://telegram.org/img/t_logo.png', 
+				                    name: args.body.message.chat.title,
+				                    description: Homey.__("group"),
+				                    chat_id: args.body.message.chat.id
+				                });
+			                
+							} else {
+								
+								if (typeof args.body.message.from.last_name !== "undefined") {
+									
+									var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
+								
+								} else {
+									
+									var name = args.body.message.from.first_name
+									
+								}
+								
+								chat_ids.push({
+				                    image: 'https://telegram.org/img/t_logo.png', 
+				                    name: name,
+				                    chat_id: args.body.message.chat.id
+				                });
+				                
+				            }
+			            
+				            this.log('chat_id added: ' + args.body.message.chat.id);
+		                
+			                Homey.ManagerSettings.set('chat_ids', chat_ids);
+			                
+			                this.log ('[chat_ids] ' + JSON.stringify(chat_ids));
+							
+							this.register_webhook();
+		
+							sendchat (Homey.__("registered"), args.body.message.chat.id);
+						
+						} else {
+							
+							sendchat (Homey.__("already_registered"), args.body.message.chat.id);
+							
+						}
+						
+					} else if (args.body.message.text.substr(0,5) == '/help') {
+						
+						sendchat (Homey.__("help"), args.body.message.chat.id);
+						
+					} else if (args.body.message.text.substr(0,5) == '/say ') {
+						
+						var output = args.body.message.text.substr(5);
+						
+						Homey.ManagerSpeechOutput.say( output );
+						
+					} else if (args.body.message.text == 'ping') {
+						
+						sendchat ('pong SDKv2', args.body.message.chat.id);
+						
+					} else if (args.body.message.text == 'pong') {
+						
+						sendchat ('ping SDKv2', args.body.message.chat.id);
+							
+					} else {
+					
+						// Trigger event
+						eventTrigger
+			        	.trigger({
+			                message: args.body.message.text || ''
+		                })
+		                .then( console.log( 'incomingmessage triggered') )
+		                .catch( this.error )
+                
+                
+						
+					}
+					
+				}
+			
+			}
+			
+		 })
+        .register()
+        .then(() => {
+             this.log('Webhook registered!');
+             
+		})
+        .catch( this.error )
 	}
 	
 }

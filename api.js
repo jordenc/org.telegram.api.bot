@@ -39,5 +39,16 @@ module.exports = [
                       			
         	});
         }
+    },
+    {
+        method: 		'PUT',
+        path:			'/renew_webhook/',
+        fn: function(args, callback){
+            
+           var result = Homey.app.register_webhook();
+           if( result instanceof Error ) return callback( result );
+           return callback( null, result );
+            
+        }
     }
 ]

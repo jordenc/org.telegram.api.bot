@@ -15,18 +15,12 @@ Set up your own Telegram bot. This is fully secure and private, since you are th
 Before you can use this app, you first have to follow the steps on the Settings page in Homey.
 
 # Built in commands
-There are several built in commands (and more coming) for you to play with. I plan to extend this app to be able to control a lot of devices/apps on Homey.
-
-As of now, send a message to the Telegram bot:
 - /say ...
 Fill in something on the dots to make Homey say it.
-- /ask ...
-Ask a question via Homey and receive the answer via Telegram
 - ping
 Receive 'pong'
 - pong
 Receive 'ping'
-- /help
 
 
 # Changelog
@@ -35,7 +29,8 @@ Receive 'ping'
 - Support for "official" Homey image tokens
 - Homey SDK v2 version
 - Support for multiple chat ID's
-- Support for group chats
+- Support for group chats (only possible to send messages to the group, messages from the group to Homey are NOT read)
+- The "/ask insert_question_here" function is no longer available
 - This update breaks your flows from the previous version.
 
 **Version 0.1.6** 
