@@ -1,15 +1,15 @@
 {
-    "id": "org.telegram.api.bot.dev",
+    "id": "org.telegram.api.bot",
     "name": {
-        "en": "Telegram Bot SDKv2",
-        "nl": "Telegram bot SDKv2"
+        "en": "Telegram Bot",
+        "nl": "Telegram Bot"
     },
     "sdk": 2,
-    "version": "0.1.8",
+    "version": "0.2.0",
     "compatibility": ">=1.5.0",
 	"description": {
-    	"en": "Control Homey by chatting with our Telegram bot",
-		"nl": "Beheer Homey door berichten te sturen naar onze Telegram bot"
+    	"en": "Send and receive messages and images on Telegram with Homey",
+		"nl": "Verstuur en ontvang berichten en afbeeldingen op Telegram met Homey"
   	},
   	"author": {
     	"name": "Chamid Media",
