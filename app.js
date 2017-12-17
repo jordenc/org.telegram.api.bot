@@ -93,6 +93,18 @@ class App extends Homey.App {
 				
 				this.log ("[SEND IMAGE] " + JSON.stringify (args));
 				
+				var custom_bot = Homey.ManagerSettings.get('bot_token');
+	
+				if (custom_bot !== null && custom_bot != '' && typeof custom_bot != 'undefined') {
+					
+					bot_token = custom_bot;
+					
+				} else {
+					
+					bot_token = Homey.env.BOT_TOKEN;
+				
+				}
+	
 				let image = args.droptoken;
 				image.getBuffer()
 				.then( buf => {
