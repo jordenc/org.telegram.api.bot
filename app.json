@@ -48,7 +48,8 @@
 	                "title": {
 	                    "en": "text",
 	                    "nl": "tekst"
-	                }
+	                },
+	                "example": "test"
 	            }
 	        ]
 	      }
