@@ -196,7 +196,16 @@ class App extends Homey.App {
 						chat_ids = Homey.ManagerSettings.get('chat_ids');
 						
 						//See if it is not yet in the list of chat_ids:
-						let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
+						
+						if (chat_ids != null) {
+						
+							let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
+						
+						} else {
+							
+							chat_ids = [];
+							
+						}
 						
 						this.log ("typeof obj is: " + typeof obj);
 						
