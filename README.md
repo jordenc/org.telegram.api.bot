@@ -24,8 +24,8 @@ Receive 'ping'
 
 
 # Changelog
-**Version 0.2.1**
-- Bugfix
+**Version 0.2.2**
+- Bugfixes
 
 **Version 0.2.0**
 - Giant new release with new functionality

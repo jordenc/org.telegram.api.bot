@@ -46,15 +46,6 @@ class App extends Homey.App {
 			
 		}
 		
-		let eventTrigger = new Homey.FlowCardTrigger('incomingmessage')
-		.register()
-	    .registerRunListener( (args, state ) => {
-
-	        // If true, this flow should run
-	        return Promise.resolve(true);
-	
-	    })
-	    
 		if (device_id) {
 
 			this.log ('We still remembered device_id: ' + device_id);
@@ -183,6 +174,15 @@ class App extends Homey.App {
 		myWebhook
 		.on('message', args => {
 			
+			let eventTrigger = new Homey.FlowCardTrigger('incomingmessage')
+			.register()
+		    .registerRunListener( (args, state ) => {
+	
+		        // If true, this flow should run
+		        return Promise.resolve(true);
+		
+		    })
+	    
 			this.log('[INCOMING] ' + JSON.stringify(args));
 			
 			if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
