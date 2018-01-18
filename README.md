@@ -24,6 +24,10 @@ Receive 'ping'
 
 
 # Changelog
+
+**Version 0.2.3**
+- Small bugfix for "/register" command which could cause confusion if connected to more than 1 Homey.
+
 **Version 0.2.2**
 - Bugfixes
 

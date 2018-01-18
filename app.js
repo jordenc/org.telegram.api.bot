@@ -185,13 +185,13 @@ class App extends Homey.App {
 	    
 			this.log('[INCOMING] ' + JSON.stringify(args));
 			
-			if (args.body.message.message_id > last_msg_id || typeof last_msg_id === "undefined") {
+			if (args.body.message.message_id != last_msg_id || typeof last_msg_id === "undefined" || (typeof args.body.message.text !== "undefined" && args.body.message.text.substr(0,10) == '/register ')) {
 				
 				last_msg_id = args.body.message.message_id;
 				
 				if (typeof args.body.message.text !== "undefined") {
 					
-					if (args.body.message.text.substr(0,10) == '/register ') {
+					if (args.body.message.text.substr(0,10) == '/register ' && args.body.message.text == '/register ' + device_id) {
 						
 						chat_ids = Homey.ManagerSettings.get('chat_ids');
 						
