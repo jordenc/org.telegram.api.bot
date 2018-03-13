@@ -316,8 +316,6 @@ function sendchat (message, chat_id) {
 	
 	}
 
-	console.log('Message: ' + message);
-	
 	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message)).then(function (result) {
 	  	console.log('Code: ' + result.response.statusCode)
 	  	console.log('Response: ' + result.data)
