@@ -312,16 +312,18 @@ function sendchat (message, chat_id) {
 		bot_token = custom_bot;
 		
 	} else {
-		
 		bot_token = Homey.env.BOT_TOKEN;
 	
 	}
-	
-	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message).then(function (result) {
+
+	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message)).then(function (result) {
 	  	console.log('Code: ' + result.response.statusCode)
 	  	console.log('Response: ' + result.data)
 	  	
-	  	if (result.response.statusCode == 200) return Promise.resolve(true); else return Promise.resolve(false);
+	  	if (result.response.statusCode == 200)
+	  		return Promise.resolve(true);
+	  	else
+	  		return Promise.resolve(false);
 	});
 }
 
