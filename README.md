@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.2.4**
+- Support for cyrillic characters (Thanks safronovser!)
+
 **Version 0.2.3**
 - Small bugfix for "/register" command which could cause confusion if connected to more than 1 Homey.
 
