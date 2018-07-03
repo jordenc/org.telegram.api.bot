@@ -50,5 +50,20 @@ module.exports = [
            return callback( null, result );
             
         }
+    },
+    
+    /* Required GET input: to (receiver ID), text (message) */
+    {
+        method: 		'GET',
+        path:			'/send_message/',
+        public: true,
+        fn: function(args, callback){
+            
+           Homey.log (JSON.stringify (args));
+           
+           var result = Homey.app.sendchat (args.body.to, args.body.text);
+           return callback( null, result );
+            
+        }
     }
 ]

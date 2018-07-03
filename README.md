@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.2.5**
+- Added an API function "sendmessage" on request
+
 **Version 0.2.4**
 - Support for cyrillic characters (Thanks safronovser!)
 
