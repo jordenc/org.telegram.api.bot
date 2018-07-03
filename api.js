@@ -58,12 +58,32 @@ module.exports = [
         path:			'/send_message/',
         public: true,
         fn: function(args, callback){
-            
-           Homey.log (JSON.stringify (args));
            
-           var result = Homey.app.sendchat (args.body.to, args.body.text);
-           return callback( null, result );
-            
+           console.log ("received: " + JSON.stringify(args));
+           var http = require('http.min');
+
+           var chat_id = args.query.to;
+           var message = args.query.text;
+           
+           var custom_bot = Homey.ManagerSettings.get('bot_token');
+	
+			if (custom_bot !== null && custom_bot != '' && typeof custom_bot != 'undefined') {
+				
+				bot_token = custom_bot;
+				
+			} else {
+				
+				bot_token = Homey.env.BOT_TOKEN;
+			
+			}
+			
+			http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message)).then(function (result) {
+			  	console.log('Code: ' + result.response.statusCode)
+			  	console.log('Response: ' + result.data)
+			  	
+			  	if (result.response.statusCode == 200) callback(null, true); else callback(null, false);
+			});
+	
         }
     }
 ]
