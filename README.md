@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.2.6**
+- Added token "user" for incoming message triggers.
+
 **Version 0.2.5**
 - Added an API function "sendmessage" on request
 

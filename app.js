@@ -256,8 +256,9 @@ class App extends Homey.App {
 							
 						}
 						
-					} else if (args.body.message.text.substr(0,5) == '/help') {
+					} else if (args.body.message.text.substr(0,5) == '/help') { // && args.body.message.bot_id == 
 						
+						sendchat ('INFO: ' + JSON.stringify(args.body), args.body.message.chat.id);
 						sendchat (Homey.__("help"), args.body.message.chat.id);
 						
 					} else if (args.body.message.text.substr(0,5) == '/say ') {
@@ -275,16 +276,25 @@ class App extends Homey.App {
 						sendchat ('ping SDKv2', args.body.message.chat.id);
 							
 					} else {
-					
+						
+						if (typeof args.body.message.from.last_name !== "undefined") {
+									
+							var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
+						
+						} else {
+							
+							var name = args.body.message.from.first_name
+							
+						}
+								
 						// Trigger event
 						eventTrigger
 			        	.trigger({
-			                message: args.body.message.text || ''
+			                message: args.body.message.text || '',
+			                user: name || ''
 		                })
 		                .then( console.log( 'incomingmessage triggered') )
 		                .catch( this.error )
-                
-                
 						
 					}
 					
