@@ -5,7 +5,7 @@
         "nl": "Telegram Bot"
     },
     "sdk": 2,
-    "version": "0.2.6",
+    "version": "0.2.7",
     "compatibility": ">=1.5.0",
 	"description": {
     	"en": "Send and receive messages and images on Telegram with Homey",

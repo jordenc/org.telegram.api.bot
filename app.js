@@ -69,7 +69,12 @@ class App extends Homey.App {
 		    .registerRunListener(( args, state ) => {
 		
 				this.log('[SEND CHAT] ' + JSON.stringify (args));
-				sendchat (args.text, args.to.chat_id);
+				
+				if (typeof (args.to.chat_id !== "undefined")) {
+					
+					sendchat (args.text, args.to.chat_id);
+				
+				}
 				
 		    })
 		    .getArgument('to')
@@ -97,49 +102,69 @@ class App extends Homey.App {
 				}
 	
 				let image = args.droptoken;
-				image.getBuffer()
-				.then( buf => {
+				
+				if (typeof image !== "undefined") {
 					
-					var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
-					var form = r.form();
-					
-					form.append('chat_id', args.to.chat_id);
-					
-					if (image.getFormat() == "jpg") {
+					image.getBuffer()
+					.then( buf => {
 						
-						this.log ("jpg");
-
-						return form.append('photo', new Buffer(buf),
-							{contentType: 'image/jpeg', filename: 'x.jpg'});
+						var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
+						var form = r.form();
+						
+						form.append('chat_id', args.to.chat_id);
+						
+						if (image.getFormat() == "jpg") {
 							
-					} else if (image.getFormat() == "gif") {
-						
-						this.log ("gif");
-						
-						form.append('photo', new Buffer(buf),
-							{contentType: 'image/gif', filename: 'x.gif'});
-						
-					} else if (image.getFormat() == "png") {
-						
-						this.log ("png");
-						
-						form.append('photo', new Buffer(buf),
-							{contentType: 'image/png', filename: 'x.png'});
+							this.log ("jpg");
+	
+							return form.append('photo', new Buffer(buf),
+								{contentType: 'image/jpeg', filename: 'x.jpg'});
+								
+						} else if (image.getFormat() == "gif") {
 							
-					}
-					
-					function requestCallback(err, res, body) {
-					  console.log(body);
+							this.log ("gif");
+							
+							form.append('photo', new Buffer(buf),
+								{contentType: 'image/gif', filename: 'x.gif'});
+							
+						} else if (image.getFormat() == "png") {
+							
+							this.log ("png");
+							
+							form.append('photo', new Buffer(buf),
+								{contentType: 'image/png', filename: 'x.png'});
+								
+						}
+						
+						function requestCallback(err, res, body) {
+						  console.log(body);
+						  
+						  if (typeof body !== "undefined") {
+							  
+							  if (typeof body.ok !== "undefined") {
+						  
+								  if (body.ok == true) {
+									  return Promise.resolve(true);
+								  } else {
+									  return Promise.resolve(false);
+								  }
+								  
+							   } else {
+								   return Promise.resolve(false);
+							   }
+							} else {
+								return Promise.resolve(false);
+							}
+						}
 					  
-					  if (body.ok == true) {
-						  return Promise.resolve(true);
-					  } else {
-						  return Promise.resolve(false);
-					  }
-					}
-				  
-				})
-				.catch (this.log("sendimage done"))					
+					})
+					.catch (this.log("sendimage done"))
+				
+				} else {
+					
+					return Promise.resolve(false);
+					
+				}			
 			})
 			.getArgument('to')
 	        .registerAutocompleteListener(( query, args ) => {
