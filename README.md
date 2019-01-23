@@ -24,6 +24,8 @@ Receive 'ping'
 
 
 # Changelog
+**Version 0.2.8**
+- Minor bugfix
 
 **Version 0.2.7**
 - Crash fix

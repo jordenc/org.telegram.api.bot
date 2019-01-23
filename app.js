@@ -73,7 +73,12 @@ class App extends Homey.App {
 				if (typeof (args.to.chat_id !== "undefined")) {
 					
 					sendchat (args.text, args.to.chat_id);
+					return Promise.resolve (true);
 				
+				} else {
+					
+					return Promise.resolve (false);
+					
 				}
 				
 		    })
@@ -103,7 +108,7 @@ class App extends Homey.App {
 	
 				let image = args.droptoken;
 				
-				if (typeof image !== "undefined") {
+				if (typeof image !== "undefined" && image !== null) {
 					
 					image.getBuffer()
 					.then( buf => {
