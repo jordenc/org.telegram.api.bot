@@ -70,7 +70,7 @@ class App extends Homey.App {
 		
 				this.log('[SEND CHAT] ' + JSON.stringify (args));
 				
-				if (typeof (args.to.chat_id !== "undefined")) {
+				if (typeof (args.to !== "undefined") && typeof (args.to.chat_id !== "undefined")) {
 					
 					sendchat (args.text, args.to.chat_id);
 					return Promise.resolve (true);
