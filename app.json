@@ -5,6 +5,7 @@
         "nl": "Telegram Bot"
     },
     "sdk": 2,
+    "brandColor": "#2fa6d9",
     "version": "0.2.8",
     "compatibility": ">=1.5.0",
 	"description": {

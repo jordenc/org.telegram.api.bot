@@ -10,10 +10,23 @@ let chat_ids 	=	[];
 
 let custom_bot_token 	=	Homey.ManagerSettings.get('bot_token');
 
-//Homey.ManagerSettings.get('chat_ids');
-
-
 var last_msg_id;
+
+var log = [];
+
+console.log = function(string,) {
+	let d = new Date();
+	let n = d.toLocaleTimeString();
+	let item = {};
+	item.time = n;
+	item.string = string;
+	log.push(item);
+	Homey.ManagerApi.realtime('log_new', item)
+	  .catch( this.error )
+	if(log.length > 50){
+	  log.splice(0,1);
+	}
+};
 
 class App extends Homey.App {
 	
@@ -23,7 +36,7 @@ class App extends Homey.App {
 		
 		var custom_bot = Homey.ManagerSettings.get('bot_token');
 		
-		this.log ("custom_bot = " + typeof custom_bot + " / " + JSON.stringify (custom_bot));
+		console.log ("custom_bot = " + typeof custom_bot + " / " + JSON.stringify (custom_bot));
 		
 		if (custom_bot !== null) {
 			
@@ -32,11 +45,11 @@ class App extends Homey.App {
 		}
 		
 		if (typeof chat_ids != "object") {
-			this.log ('Not yet registered with chat_ids');
+			console.log ('Not yet registered with chat_ids');
 			chat_ids = [];
 		} else {
 			
-			this.log('We still remembered chat_ids: ' + JSON.stringify(chat_ids));
+			console.log('We still remembered chat_ids: ' + JSON.stringify(chat_ids));
 			
 		}
 		
@@ -48,7 +61,7 @@ class App extends Homey.App {
 		
 		if (device_id) {
 
-			this.log ('We still remembered device_id: ' + device_id);
+			console.log ('We still remembered device_id: ' + device_id);
 
 		} else {
 
@@ -58,7 +71,7 @@ class App extends Homey.App {
 		    for( var i=0; i < 10; i++ )
 		        device_id += possible.charAt(Math.floor(Math.random() * possible.length));
 
-			this.log('new device_id: ' + device_id);
+			console.log('new device_id: ' + device_id);
 			device_id = Homey.ManagerSettings.set('device_id', device_id);
 
 		}
@@ -68,7 +81,7 @@ class App extends Homey.App {
 		    .register()
 		    .registerRunListener(( args, state ) => {
 		
-				this.log('[SEND CHAT] ' + JSON.stringify (args));
+				console.log('[SEND CHAT] ' + JSON.stringify (args));
 				
 				if (typeof (args.to !== "undefined") && typeof (args.to.chat_id !== "undefined")) {
 					
@@ -92,7 +105,7 @@ class App extends Homey.App {
 			.register()
 			.registerRunListener(( args, state) => {
 				
-				this.log ("[SEND IMAGE] " + JSON.stringify (args));
+				console.log ("[SEND IMAGE] " + JSON.stringify (args));
 				
 				var custom_bot = Homey.ManagerSettings.get('bot_token');
 	
@@ -120,21 +133,21 @@ class App extends Homey.App {
 						
 						if (image.getFormat() == "jpg") {
 							
-							this.log ("jpg");
+							console.log ("jpg");
 	
 							return form.append('photo', new Buffer(buf),
 								{contentType: 'image/jpeg', filename: 'x.jpg'});
 								
 						} else if (image.getFormat() == "gif") {
 							
-							this.log ("gif");
+							console.log ("gif");
 							
 							form.append('photo', new Buffer(buf),
 								{contentType: 'image/gif', filename: 'x.gif'});
 							
 						} else if (image.getFormat() == "png") {
 							
-							this.log ("png");
+							console.log ("png");
 							
 							form.append('photo', new Buffer(buf),
 								{contentType: 'image/png', filename: 'x.png'});
@@ -163,7 +176,7 @@ class App extends Homey.App {
 						}
 					  
 					})
-					.catch (this.log("sendimage done"))
+					.catch (console.log("sendimage done"))
 				
 				} else {
 					
@@ -183,14 +196,14 @@ class App extends Homey.App {
     
 		} else {
 			
-			this.log ("Missing env.json ... receiving messages will not work. Sending will only work if using a custombot.")
+			console.log ("Missing env.json ... receiving messages will not work. Sending will only work if using a custombot.")
 			
 		}
 
 	}
 	
 	register_webhook(){
-		
+
 		chat_ids = Homey.ManagerSettings.get('chat_ids');
 		
 		let data = {
@@ -213,7 +226,7 @@ class App extends Homey.App {
 		
 		    })
 	    
-			this.log('[INCOMING] ' + JSON.stringify(args));
+			console.log('[INCOMING] ' + JSON.stringify(args));
 			
 			if (args.body.message.message_id != last_msg_id || typeof last_msg_id === "undefined" || (typeof args.body.message.text !== "undefined" && args.body.message.text.substr(0,10) == '/register ')) {
 				
@@ -237,7 +250,7 @@ class App extends Homey.App {
 							
 						}
 						
-						this.log ("typeof obj is: " + typeof obj);
+						console.log ("typeof obj is: " + typeof obj);
 						
 						if (typeof obj === "undefined") {
 						
@@ -270,11 +283,11 @@ class App extends Homey.App {
 				                
 				            }
 			            
-				            this.log('chat_id added: ' + args.body.message.chat.id);
+				            console.log('chat_id added: ' + args.body.message.chat.id);
 		                
 			                Homey.ManagerSettings.set('chat_ids', chat_ids);
 			                
-			                this.log ('[chat_ids] ' + JSON.stringify(chat_ids));
+			                console.log ('[chat_ids] ' + JSON.stringify(chat_ids));
 							
 							this.register_webhook();
 		
@@ -335,14 +348,14 @@ class App extends Homey.App {
 		 })
         .register()
         .then(() => {
-             this.log('Webhook registered!');
+             console.log('Webhook registered!');
              
 		})
         .catch( this.error )
 	}
 	
 }
-
+  		
 function sendchat (message, chat_id) {
 
 	var custom_bot = Homey.ManagerSettings.get('bot_token');

@@ -26,6 +26,8 @@ Receive 'ping'
 # Changelog
 **Version 0.2.8**
 - Minor bugfix
+- Added button to "Renew webhook" from settings page.
+- Added logging to settings page
 
 **Version 0.2.7**
 - Crash fix

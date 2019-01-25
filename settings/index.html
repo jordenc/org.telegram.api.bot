@@ -41,6 +41,13 @@
 &nbsp;<br/>
 <hr>
 
+<div id="renew_webhook">
+	<button id="renewhook" data-i18n="settings.renew_webhook"></button>
+</div>
+
+&nbsp;<br/>
+<hr>
+
 <div id="connected_users">
 	
 	<h2 data-i18n="settings.connected_users"></h2>
@@ -49,13 +56,21 @@
 	
 </div>
 
+&nbsp;<br/>
+<hr>
+
+<div id="showlog">
+	Log
+	<textarea id="textlog" style="width: 100%" rows="10"></textarea>
+</div>
+
 <script type="text/javascript">
 
     // Initialize Homey
     function onHomeyReady(Homey) {
         Homey.ready();
 
-        // Fill input with already stored settings
+		// Fill input with already stored settings
         Homey.get("device_id", function (err, value) {
             if (value) {
                 $('.device_id').val('/register ' + value);
@@ -99,6 +114,12 @@
 		    
 		});
 		
+		
+		Homey.on('log_new', (result)=>{
+           
+           $('#textlog').prepend (result.time + ': ' + result.string + "\n")
+        })
+		
 		$('body').on('click', '.delete', function () {
 			
 			var remove_key = $(this).data('id');
@@ -134,6 +155,42 @@
 				}
 				
 			});
+			
+		});
+		
+		function renew_log() {
+			
+			var logs = reverse_log();
+			
+			for (var key in logs) {
+				
+				$('#textlog').append (logs[key].time + ': ' + logs[key].string + "\n");
+				
+			}
+			
+			
+		}
+		
+		function reverse_log() {
+			
+	        return this.log.slice().reverse();
+	    
+	    }
+		
+		$('body').on('click', '#renewhook', function() {
+			
+			Homey.api('PUT', '/renew_webhook', {}, function( err, result ) {
+							    
+				if( err ) return Homey.alert(err);
+			    
+			    if (result === null) {
+				    
+				    Homey.alert ("success");
+			    
+			    }
+			    
+			});
+
 			
 		});
 	    
@@ -185,6 +242,8 @@
 			});
 			
 	    });
+	    
+	    renew_log();
 	    
     }
 </script>

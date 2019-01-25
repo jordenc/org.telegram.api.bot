@@ -21,7 +21,9 @@
 		"connected_users": "Gekoppelde gebruikers/groepen",
 		"delete": "Verwijder",
 		"are_you_sure": "Weet je zeker dat je deze gebruiker/groep wilt ontkoppelen?",
-		"are_you_sure_bot": "Weet je zeker dat je deze bot wilt ontkoppelen?"
+		"are_you_sure_bot": "Weet je zeker dat je deze bot wilt ontkoppelen?",
+		"renew_webhook": "Webhook opnieuw aanmelden",
+		"refresh_log": "Refresh log"
 	},
 	"unregistered": "Loskoppelen is gelukt",
 	"registered": "Homey is succesvol aan de Telegram chat gekoppeld",

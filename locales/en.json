@@ -21,7 +21,9 @@
 		"connected_users": "Connected users/groups",
 		"delete": "Delete",
 		"are_you_sure": "Are you sure you wish to disconnect this user/group?",
-		"are_you_sure_bot": "Are you sure you wish to disconnect this bot?"
+		"are_you_sure_bot": "Are you sure you wish to disconnect this bot?",
+		"renew_webhook": "Renew Webhook registration",
+		"refresh_log": "Refresh log"
 	},
 	"unregistered": "Unregistered succesfully",
 	"registered": "Homey registered to Telegram chat succesfully",
