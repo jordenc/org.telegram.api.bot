@@ -10,6 +10,8 @@ let chat_ids 	=	[];
 
 let custom_bot_token 	=	Homey.ManagerSettings.get('bot_token');
 
+var myWebhook;
+
 var last_msg_id;
 
 var log = [];
@@ -202,6 +204,18 @@ class App extends Homey.App {
 
 	}
 	
+	unregister_webhook() {
+		
+		myWebhook
+		.unregister()
+        .then(() => {
+             console.log('Webhook unregistered!');
+             
+		})
+        .catch( this.error )
+        
+	}
+	
 	register_webhook(){
 
 		chat_ids = Homey.ManagerSettings.get('chat_ids');
@@ -212,7 +226,7 @@ class App extends Homey.App {
 		}
 		
 		// Register webhook
-		let myWebhook = new Homey.CloudWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET, data);
+		myWebhook = new Homey.CloudWebhook(Homey.env.CLIENT_ID, Homey.env.CLIENT_SECRET, data);
 		
 		myWebhook
 		.on('message', args => {
@@ -289,6 +303,7 @@ class App extends Homey.App {
 			                
 			                console.log ('[chat_ids] ' + JSON.stringify(chat_ids));
 							
+							this.unregister_webhook();
 							this.register_webhook();
 		
 							sendchat (Homey.__("registered"), args.body.message.chat.id);
