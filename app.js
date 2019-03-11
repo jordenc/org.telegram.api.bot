@@ -74,7 +74,7 @@ class App extends Homey.App {
 		        device_id += possible.charAt(Math.floor(Math.random() * possible.length));
 
 			console.log('new device_id: ' + device_id);
-			device_id = Homey.ManagerSettings.set('device_id', device_id);
+			Homey.ManagerSettings.set('device_id', device_id);
 
 		}
     
