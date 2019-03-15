@@ -10,7 +10,8 @@
     "compatibility": ">=1.5.0",
 	"description": {
     	"en": "Send and receive messages and images on Telegram with Homey",
-		"nl": "Verstuur en ontvang berichten en afbeeldingen op Telegram met Homey"
+		"nl": "Verstuur en ontvang berichten en afbeeldingen op Telegram met Homey",
+		"de": "Senden und Empfangen von Nachrichten und Bildern per Telegramm mit Homey"
   	},
   	"author": {
     	"name": "Chamid Media",
@@ -40,14 +41,16 @@
 	        "id": "incomingmessage",
 	        "title": {
 	          "en": "A message was received",
-	          "nl": "Een bericht werd ontvangen"
+	          "nl": "Een bericht werd ontvangen",
+	          "de": "Eine Nachricht wurde empfangen"
 	        },
 	        "tokens": [
 	            {
 	                "name": "message",
 	                "title": {
 	                    "en": "text",
-	                    "nl": "tekst"
+	                    "nl": "tekst",
+	                    "en": "text"
 	                },
 	                "example": "test"
 	            },
@@ -55,7 +58,8 @@
 	                "name": "user",
 	                "title": {
 	                    "en": "user",
-	                    "nl": "gebruiker"
+	                    "nl": "gebruiker",
+	                    "de": "Benutzer"
 	                },
 	                "example": "user"
 	            }
@@ -67,7 +71,8 @@
             "id": "sendmessage",
             "title": {
                 "en": "Send a message",
-                "nl": "Stuur een bericht"
+                "nl": "Stuur een bericht",
+                "de": "Sende eine Nachricht"
             },
             "args": [
 	              {
@@ -75,7 +80,8 @@
 		              "type": "autocomplete",
 		              "placeholder": {
 			              "en": "Receiver name",
-			              "nl": "Naam ontvanger"
+			              "nl": "Naam ontvanger",
+			              "de": "Empfänger Name"
 		              }
 	              },
 	              {
@@ -83,7 +89,8 @@
 		              "type": "text",
 		              "placeholder": {
 			              "en": "Message",
-			              "nl": "Bericht"
+			              "nl": "Bericht",
+			              "de": "Nachricht"
 		              }
 	              }
 	        ]
@@ -92,7 +99,8 @@
             "id": "sendimage",
             "title": {
                 "en": "Send a picture",
-                "nl": "Stuur een afbeelding"
+                "nl": "Stuur een afbeelding",
+                "de": "Sende ein Bild"
             },
             "droptoken": "image",
             "args": [
@@ -101,7 +109,8 @@
 	              "type": "autocomplete",
 	              "placeholder": {
 		              "en": "Receiver name",
-		              "nl": "Naam ontvanger"
+		              "nl": "Naam ontvanger",
+			      "de": "Empfänger Name"
 	              }
 	        	}
 	        ]
