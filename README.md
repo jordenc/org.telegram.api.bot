@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.2.9**
+- Added German lanuage (thanks mapulu!)
+
 **Version 0.2.8**
 - Minor bugfix
 - Added button to "Renew webhook" from settings page.
