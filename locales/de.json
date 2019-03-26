@@ -26,7 +26,7 @@
 		"refresh_log": "Log aktualisieren"
 	},
 	"unregistered": "Erfolgreich abgemeldet",
-	"registered": "Homeyw wurde erfolgreich beim Telegram-Chat angemeldet",
+	"registered": "Homey wurde erfolgreich beim Telegram-Chat angemeldet",
 	"help": "Hilfetext folgt in Kürze",
 	"group": "Gruppe",
 	"already_registered": "Dieser Chat ist bereits mit Homey registriert."
