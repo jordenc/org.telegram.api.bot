@@ -25,6 +25,12 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.3.0**
+- Reduced app size (replaced request and http.min with node-fetch) (thanks jeroenvollenbrock!)
+- Fix endless running flow action send image card (thanks jeroenvollenbrock!)
+- Cleaned up code (thanks jeroenvollenbrock!)
+- New Homey 2.2.0 Image streaming API  (thanks jeroenvollenbrock!)
+
 **Version 0.2.9**
 - Added German lanuage (thanks mapulu!)
 
