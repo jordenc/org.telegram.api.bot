@@ -1,8 +1,15 @@
 "use strict";
 
-const Homey 	=	require('homey');
-let http 		=	require('http.min');
-let request		=	require('request');
+const Homey 		= require('homey');
+const {PassThrough} = require('stream');
+
+const fetch 		= require('node-fetch');
+const FormData 		= require('form-data');
+const CONTENT_TYPES = {
+	png: 'image/png',
+	jpg: 'image/jpeg',
+	gif: 'image/gif'
+};
 
 let device_id 	=	Homey.ManagerSettings.get('device_id');
 let bot_token	=	Homey.env.BOT_TOKEN;
@@ -16,7 +23,9 @@ var last_msg_id;
 
 var log = [];
 
-console.log = function(string,) {
+const originalLog = console.log;
+console.log = function(string, ...args) {
+	originalLog(string, ...args);
 	let d = new Date();
 	let n = d.toLocaleTimeString();
 	let item = {};
@@ -81,21 +90,14 @@ class App extends Homey.App {
 		let sendMessage = new Homey.FlowCardAction('sendmessage');
 		sendMessage
 		    .register()
-		    .registerRunListener(( args, state ) => {
+		    .registerRunListener(async ( args, state ) => {
 		
 				console.log('[SEND CHAT] ' + JSON.stringify (args));
-				
-				if (typeof (args.to !== "undefined") && typeof (args.to.chat_id !== "undefined")) {
-					
-					sendchat (args.text, args.to.chat_id);
-					return Promise.resolve (true);
-				
-				} else {
-					
-					return Promise.resolve (false);
-					
-				}
-				
+
+				if(typeof args.to === "undefined" || typeof args.to.chat_id === "undefined")
+					return false;
+
+				return sendchat(args.text, args.to.chat_id);
 		    })
 		    .getArgument('to')
 	        .registerAutocompleteListener(( query, args ) => {
@@ -105,90 +107,60 @@ class App extends Homey.App {
 		let sendImage = new Homey.FlowCardAction('sendimage');
 		sendImage
 			.register()
-			.registerRunListener(( args, state) => {
+			.registerRunListener(async ( args, state) => {
 				
 				console.log ("[SEND IMAGE] " + JSON.stringify (args));
 				
-				var custom_bot = Homey.ManagerSettings.get('bot_token');
-	
-				if (custom_bot !== null && custom_bot != '' && typeof custom_bot != 'undefined') {
-					
-					bot_token = custom_bot;
-					
-				} else {
-					
-					bot_token = Homey.env.BOT_TOKEN;
-				
-				}
+				bot_token = Homey.ManagerSettings.get('bot_token') || bot_token;
 	
 				let image = args.droptoken;
 				
-				if (typeof image !== "undefined" && image !== null) {
-					
-					image.getBuffer()
-					.then( buf => {
-						
-						var r = request.post("https://api.telegram.org/bot" + bot_token + "/sendPhoto", requestCallback);
-						var form = r.form();
-						
-						form.append('chat_id', args.to.chat_id);
-						
-						if (image.getFormat() == "jpg") {
-							
-							console.log ("jpg");
-	
-							return form.append('photo', new Buffer(buf),
-								{contentType: 'image/jpeg', filename: 'x.jpg'});
-								
-						} else if (image.getFormat() == "gif") {
-							
-							console.log ("gif");
-							
-							form.append('photo', new Buffer(buf),
-								{contentType: 'image/gif', filename: 'x.gif'});
-							
-						} else if (image.getFormat() == "png") {
-							
-							console.log ("png");
-							
-							form.append('photo', new Buffer(buf),
-								{contentType: 'image/png', filename: 'x.png'});
-								
-						}
-						
-						function requestCallback(err, res, body) {
-						  console.log(body);
-						  
-						  if (typeof body !== "undefined") {
-							  
-							  if (typeof body.ok !== "undefined") {
-						  
-								  if (body.ok == true) {
-									  return Promise.resolve(true);
-								  } else {
-									  return Promise.resolve(false);
-								  }
-								  
-							   } else {
-								   return Promise.resolve(false);
-							   }
-							} else {
-								return Promise.resolve(false);
-							}
-						}
-					  
-					})
-					.catch (console.log("sendimage done"))
+				if (typeof image === "undefined" || image == null)
+					return false;
+
 				
-				} else {
+				const form = new FormData();
+				form.append('chat_id', args.to.chat_id);
+				
+				if(image.getStream) {
+					const stream = await image.getStream();
+					form.append('photo', stream, {
+						contentType: stream.contentType,
+						filename: stream.filename,
+						name: 'photo',
+					});
+				} else {//backwards compatibility
 					
-					return Promise.resolve(false);
-					
-				}			
+					const buf = image.getBuffer();
+					if(typeof buf === 'string') {
+						form.append('photo', buf);
+					} else {
+						form.append('photo', buf, {
+							contentType: CONTENT_TYPES[image.getFormat()],
+							filename: 'x.'+image.getFormat(),
+							name: 'photo',
+						});
+					}
+				}
+
+				const response = await fetch("https://api.telegram.org/bot" + bot_token + "/sendPhoto", {
+					method: 'POST',
+					body: form.pipe(new PassThrough()), 
+					headers: form.getHeaders(),
+				});
+
+				if(!response.ok) {
+					console.log('Response:', await response.text());
+					return false;
+				}
+
+				const body = await response.json();
+				return (response.ok && body && body.ok && body.ok === true);
+
 			})
 			.getArgument('to')
-	        .registerAutocompleteListener(( query, args ) => {
-	            return Promise.resolve(chat_ids);
+	        .registerAutocompleteListener(async ( query, args ) => {
+	            return chat_ids;
 	        });
 		
 		// Register initial webhook
@@ -371,26 +343,18 @@ class App extends Homey.App {
 	
 }
   		
-function sendchat (message, chat_id) {
+async function sendchat (message, chat_id) {
+	bot_token = Homey.ManagerSettings.get('bot_token') || bot_token;
 
-	var custom_bot = Homey.ManagerSettings.get('bot_token');
-	
-	if (custom_bot !== null && custom_bot != '' && typeof custom_bot != 'undefined') {
-		
-		bot_token = custom_bot;
-		
-	} else {
-		
-		bot_token = Homey.env.BOT_TOKEN;
-	
+	const result = await fetch('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+
+	if(!result.ok) {
+		console.log('Response:', await result.text());
+		return false;
 	}
-	
-	http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message)).then(function (result) {
-	  	console.log('Code: ' + result.response.statusCode)
-	  	console.log('Response: ' + result.data)
-	  	
-	  	if (result.response.statusCode == 200) return Promise.resolve(true); else return Promise.resolve(false);
-	});
+
+	const body = await result.json();
+	return (result.ok && body && body.ok === true);
 }
 
 module.exports = App;
