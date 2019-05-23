@@ -123,6 +123,9 @@ class App extends Homey.App {
 				form.append('chat_id', args.to.chat_id);
 				
 				if(image.getStream) {
+					
+					console.log ("get stream");
+					
 					const stream = await image.getStream();
 					form.append('photo', stream, {
 						contentType: stream.contentType,
@@ -131,10 +134,12 @@ class App extends Homey.App {
 					});
 				} else {//backwards compatibility
 					
-					const buf = image.getBuffer();
+					const buf = await image.getBuffer();
+					
 					if(typeof buf === 'string') {
 						form.append('photo', buf);
 					} else {
+						
 						form.append('photo', buf, {
 							contentType: CONTENT_TYPES[image.getFormat()],
 							filename: 'x.'+image.getFormat(),
