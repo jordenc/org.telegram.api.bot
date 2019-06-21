@@ -1,49 +1,56 @@
 const Homey 	=	require('homey');
+const fetch 		= require('node-fetch');
 
 module.exports = [
     {
         method: 		'PUT',
         path:			'/addbot/',
-        fn: function(args, callback){
-           
-           var http = require('http.min');
-           
-           http('https://api.telegram.org/bot' + args.body.bot_token + '/setWebhook?url=https://webhooks.athom.com/webhook/' + Homey.env.CLIENT_ID).then(function (result) {
-			  	
-			  	if (result.response.statusCode == 200) {
-					
-					Homey.ManagerSettings.set('bot_token', args.body.bot_token);
-				  	callback ('Finished!', true);
-			  	
-			  	} else {
-				
-				  	callback ('Error ' + result.response.statusCode + ': ' + result.data, false);
-			  	}
+        fn: async function(args, callback){
 			
-			});
+			const result = await fetch('https://api.telegram.org/bot' + args.body.bot_token + '/setWebhook?url=https://webhooks.athom.com/webhook/' + Homey.env.CLIENT_ID);
+		
+			if(!result.ok) {
+				console.log('Response:', await result.text());
+				callback ('Error ' + result.response.statusCode + ': ' + result.data, false);
+				return false;
+			}
+			
+			const body = await result.json();
+			if (result.ok && body && body.ok === true){
+				
+				Homey.ManagerSettings.set('bot_token', args.body.bot_token);
+				  	callback ('Finished!', true);
+				
+			}
            			
         }
     },
     {
         method: 		'PUT',
         path:			'/deletebot/',
-        fn: function(args, callback){
+        fn: async function(args, callback){
             
-           var http = require('http.min');
-           
-           http('https://api.telegram.org/bot' + Homey.ManagerSettings.get('bot_token') + '/setWebhook?url=').then(function (result) {
-	           
-	           Homey.ManagerSettings.set('bot_token', '');
-	           
-	           callback ('Finished', true);
-                      			
-        	});
+           const result = await fetch('https://api.telegram.org/bot' + Homey.ManagerSettings.get('bot_token') + '/setWebhook?url=');
+		
+			if(!result.ok) {
+				console.log('Response:', await result.text());
+				return false;
+			}
+			
+			const body = await result.json();
+			if (result.ok && body && body.ok === true){
+				
+				Homey.ManagerSettings.set('bot_token', '');
+				callback ('Finished', true);
+				
+			}
+
         }
     },
     {
         method: 		'PUT',
         path:			'/renew_webhook/',
-        fn: function(args, callback){
+        fn: async function(args, callback){
 	        
 	       var result = Homey.app.unregister_webhook();
             
@@ -59,7 +66,7 @@ module.exports = [
         method: 		'GET',
         path:			'/send_message/',
         public: true,
-        fn: function(args, callback){
+        fn: async function(args, callback){
            
            console.log ("received: " + JSON.stringify(args));
            var http = require('http.min');
@@ -69,22 +76,25 @@ module.exports = [
            
            var custom_bot = Homey.ManagerSettings.get('bot_token');
 	
-			if (custom_bot !== null && custom_bot != '' && typeof custom_bot != 'undefined') {
+			if (custom_bot !== null) {
 				
 				bot_token = custom_bot;
 				
 			} else {
 				
-				bot_token = Homey.env.BOT_TOKEN;
-			
+				bot_token = Homey.ManagerSettings.get('bot_token');
+				
 			}
-			
-			http('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message)).then(function (result) {
-			  	console.log('Code: ' + result.response.statusCode)
-			  	console.log('Response: ' + result.data)
-			  	
-			  	if (result.response.statusCode == 200) callback(null, true); else callback(null, false);
-			});
+		
+			const result = await fetch('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+		
+			if(!result.ok) {
+				console.log('Response:', await result.text());
+				return false;
+			}
+		
+			const body = await result.json();
+			return (result.ok && body && body.ok === true);
 	
         }
     }

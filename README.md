@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.3.1**
+- Fix for bug that prevented custom bot setup
+
 **Version 0.3.0**
 - Reduced app size (replaced request and http.min with node-fetch) (thanks jeroenvollenbrock!)
 - Fix endless running flow action send image card (thanks jeroenvollenbrock!)

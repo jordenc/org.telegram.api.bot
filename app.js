@@ -349,7 +349,18 @@ class App extends Homey.App {
 }
   		
 async function sendchat (message, chat_id) {
-	bot_token = Homey.ManagerSettings.get('bot_token') || bot_token;
+	
+	var custom_bot = Homey.ManagerSettings.get('bot_token');
+	
+	if (custom_bot !== null) {
+		
+		bot_token = custom_bot;
+		
+	} else {
+		
+		bot_token = Homey.ManagerSettings.get('bot_token');
+		
+	}
 
 	const result = await fetch('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
 
