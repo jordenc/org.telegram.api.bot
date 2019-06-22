@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.3.2**
+- Bugfix
+
 **Version 0.3.1**
 - Fix for bug that prevented custom bot setup
 

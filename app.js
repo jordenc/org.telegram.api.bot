@@ -49,7 +49,7 @@ class App extends Homey.App {
 		
 		console.log ("custom_bot = " + typeof custom_bot + " / " + JSON.stringify (custom_bot));
 		
-		if (custom_bot !== null) {
+		if (custom_bot !== null && custom_bot != "") {
 			
 			bot_token = custom_bot;
 			
@@ -350,15 +350,9 @@ class App extends Homey.App {
   		
 async function sendchat (message, chat_id) {
 	
-	var custom_bot = Homey.ManagerSettings.get('bot_token');
-	
-	if (custom_bot !== null) {
+	if (custom_bot_token !== null && custom_bot_token != "") {
 		
-		bot_token = custom_bot;
-		
-	} else {
-		
-		bot_token = Homey.ManagerSettings.get('bot_token');
+		bot_token = custom_bot_token;
 		
 	}
 
