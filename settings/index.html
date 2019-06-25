@@ -202,7 +202,9 @@
 				 
 			}, function( msg, result ){
 				
-				if (msg == 'Finished!') {
+				console.log ('msg = ' + msg + ', result = ' + result);
+				
+				if (result == 'Finished') {
 					Homey.set('bot_token', $('#token').val());
 					
 					$('.own_bot_1').css('display', 'none');
@@ -227,7 +229,7 @@
 						
 						console.log (msg + ' / result = ' + result);
 						
-						if (msg == 'Finished') {
+						if (result == 'Finished') {
 							
 							$('#own_bot').css('display', 'block');
 							$('#delete_bot').css('display', 'none');

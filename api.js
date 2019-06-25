@@ -12,14 +12,14 @@ module.exports = [
 			if(!result.ok) {
 				console.log('Response:', await result.text());
 				callback ('Error ' + result.response.statusCode + ': ' + result.data, false);
-				return false;
 			}
 			
 			const body = await result.json();
 			if (result.ok && body && body.ok === true){
 				
 				Homey.ManagerSettings.set('bot_token', args.body.bot_token);
-				  	callback ('Finished!', true);
+				
+				callback(null,'Finished');
 				
 			}
            			
@@ -41,7 +41,7 @@ module.exports = [
 			if (result.ok && body && body.ok === true){
 				
 				Homey.ManagerSettings.set('bot_token', '');
-				callback ('Finished', true);
+				callback (null, 'Finished');
 				
 			}
 
@@ -76,7 +76,7 @@ module.exports = [
            
            var custom_bot = Homey.ManagerSettings.get('bot_token');
 	
-			if (custom_bot !== null) {
+			if (custom_bot !== null && custom_bot != "") {
 				
 				bot_token = custom_bot;
 				
