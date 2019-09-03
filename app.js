@@ -219,122 +219,125 @@ class App extends Homey.App {
 	    
 			console.log('[INCOMING] ' + JSON.stringify(args));
 			
-			if (args.body.message.message_id != last_msg_id || typeof last_msg_id === "undefined" || (typeof args.body.message.text !== "undefined" && args.body.message.text.substr(0,10) == '/register ')) {
-				
-				last_msg_id = args.body.message.message_id;
-				
-				if (typeof args.body.message.text !== "undefined") {
-					
-					if (args.body.message.text.substr(0,10) == '/register ' && args.body.message.text == '/register ' + device_id) {
-						
-						chat_ids = Homey.ManagerSettings.get('chat_ids');
-						
-						//See if it is not yet in the list of chat_ids:
-						
-						if (chat_ids != null) {
-						
-							let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
-						
-						} else {
-							
-							chat_ids = [];
-							
-						}
-						
-						console.log ("typeof obj is: " + typeof obj);
-						
-						if (typeof obj === "undefined") {
-						
-							if (typeof args.body.message.chat.type !== undefined && args.body.message.chat.type == 'group') {
-								
-								chat_ids.push({
-				                    image: 'https://telegram.org/img/t_logo.png', 
-				                    name: args.body.message.chat.title,
-				                    description: Homey.__("group"),
-				                    chat_id: args.body.message.chat.id
-				                });
-			                
+			// Check if message isn't undefined
+			if(args.body.message != undefined) {
+				if (args.body.message.message_id != last_msg_id || typeof last_msg_id === "undefined" || (typeof args.body.message.text !== "undefined" && args.body.message.text.substr(0,10) == '/register ')) {
+
+					last_msg_id = args.body.message.message_id;
+
+					if (typeof args.body.message.text !== "undefined") {
+
+						if (args.body.message.text.substr(0,10) == '/register ' && args.body.message.text == '/register ' + device_id) {
+
+							chat_ids = Homey.ManagerSettings.get('chat_ids');
+
+							//See if it is not yet in the list of chat_ids:
+
+							if (chat_ids != null) {
+
+								let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
+
 							} else {
-								
-								if (typeof args.body.message.from.last_name !== "undefined") {
-									
-									var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
-								
+
+								chat_ids = [];
+
+							}
+
+							console.log ("typeof obj is: " + typeof obj);
+
+							if (typeof obj === "undefined") {
+
+								if (typeof args.body.message.chat.type !== undefined && args.body.message.chat.type == 'group') {
+
+									chat_ids.push({
+							    image: 'https://telegram.org/img/t_logo.png', 
+							    name: args.body.message.chat.title,
+							    description: Homey.__("group"),
+							    chat_id: args.body.message.chat.id
+							});
+
 								} else {
-									
-									var name = args.body.message.from.first_name
-									
-								}
-								
-								chat_ids.push({
-				                    image: 'https://telegram.org/img/t_logo.png', 
-				                    name: name,
-				                    chat_id: args.body.message.chat.id
-				                });
-				                
-				            }
-			            
-				            console.log('chat_id added: ' + args.body.message.chat.id);
-		                
-			                Homey.ManagerSettings.set('chat_ids', chat_ids);
-			                
-			                console.log ('[chat_ids] ' + JSON.stringify(chat_ids));
-							
-							this.unregister_webhook();
-							this.register_webhook();
-		
-							sendchat (Homey.__("registered"), args.body.message.chat.id);
-						
+
+									if (typeof args.body.message.from.last_name !== "undefined") {
+
+										var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
+
+									} else {
+
+										var name = args.body.message.from.first_name
+
+									}
+
+									chat_ids.push({
+							    image: 'https://telegram.org/img/t_logo.png', 
+							    name: name,
+							    chat_id: args.body.message.chat.id
+							});
+
+						    }
+
+						    console.log('chat_id added: ' + args.body.message.chat.id);
+
+						Homey.ManagerSettings.set('chat_ids', chat_ids);
+
+						console.log ('[chat_ids] ' + JSON.stringify(chat_ids));
+
+								this.unregister_webhook();
+								this.register_webhook();
+
+								sendchat (Homey.__("registered"), args.body.message.chat.id);
+
+							} else {
+
+								sendchat (Homey.__("already_registered"), args.body.message.chat.id);
+
+							}
+
+						} else if (args.body.message.text.substr(0,5) == '/help') { // && args.body.message.bot_id == 
+
+							sendchat ('INFO: ' + JSON.stringify(args.body), args.body.message.chat.id);
+							sendchat (Homey.__("help"), args.body.message.chat.id);
+
+						} else if (args.body.message.text.substr(0,5) == '/say ') {
+
+							var output = args.body.message.text.substr(5);
+
+							Homey.ManagerSpeechOutput.say( output );
+
+						} else if (args.body.message.text == 'ping') {
+
+							sendchat ('pong SDKv2', args.body.message.chat.id);
+
+						} else if (args.body.message.text == 'pong') {
+
+							sendchat ('ping SDKv2', args.body.message.chat.id);
+
 						} else {
-							
-							sendchat (Homey.__("already_registered"), args.body.message.chat.id);
-							
+
+							if (typeof args.body.message.from.last_name !== "undefined") {
+
+								var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
+
+							} else {
+
+								var name = args.body.message.from.first_name
+
+							}
+
+							// Trigger event
+							eventTrigger
+						.trigger({
+						message: args.body.message.text || '',
+						user: name || ''
+					})
+					.then( console.log( 'incomingmessage triggered') )
+					.catch( this.error )
+
 						}
-						
-					} else if (args.body.message.text.substr(0,5) == '/help') { // && args.body.message.bot_id == 
-						
-						sendchat ('INFO: ' + JSON.stringify(args.body), args.body.message.chat.id);
-						sendchat (Homey.__("help"), args.body.message.chat.id);
-						
-					} else if (args.body.message.text.substr(0,5) == '/say ') {
-						
-						var output = args.body.message.text.substr(5);
-						
-						Homey.ManagerSpeechOutput.say( output );
-						
-					} else if (args.body.message.text == 'ping') {
-						
-						sendchat ('pong SDKv2', args.body.message.chat.id);
-						
-					} else if (args.body.message.text == 'pong') {
-						
-						sendchat ('ping SDKv2', args.body.message.chat.id);
-							
-					} else {
-						
-						if (typeof args.body.message.from.last_name !== "undefined") {
-									
-							var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
-						
-						} else {
-							
-							var name = args.body.message.from.first_name
-							
-						}
-								
-						// Trigger event
-						eventTrigger
-			        	.trigger({
-			                message: args.body.message.text || '',
-			                user: name || ''
-		                })
-		                .then( console.log( 'incomingmessage triggered') )
-		                .catch( this.error )
-						
+
 					}
-					
+
 				}
-			
 			}
 			
 		 })
