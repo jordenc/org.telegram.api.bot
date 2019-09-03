@@ -6,7 +6,7 @@
     },
     "sdk": 2,
     "brandColor": "#2fa6d9",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "compatibility": ">=1.5.0",
 	"description": {
     	"en": "Send and receive messages and images on Telegram with Homey",
