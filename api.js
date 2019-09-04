@@ -69,8 +69,7 @@ module.exports = [
         fn: async function(args, callback){
            
            console.log ("received: " + JSON.stringify(args));
-           var http = require('http.min');
-
+           
            var chat_id = args.query.to;
            var message = args.query.text;
            
