@@ -25,6 +25,9 @@ Receive 'ping'
 
 # Changelog
 
+**Version 0.3.4**
+- Fix for app crashing
+
 **Version 0.3.3**
 - Fix for bug that prevented custom bot setup / deletion
 
