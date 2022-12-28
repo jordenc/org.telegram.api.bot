@@ -1,29 +1,22 @@
 # Homey Telegram communication
 
-Use Telegram (https://telegram.org/) with Homey: Send and receive messages in flows.
+Use Telegram (https://telegram.org/) with Homey: Send and receive messages in flows, send Homey images to your Telegram chat.
 
-**Want to show your appreciation for this app? A donation is possible via http://www.d2c.nl **
-
-There are 2 ways to use this app:
-
-# 1: Easy way (less secure)
-Use our @athomhomey_bot which is a shared bot. In theory we might be able to read the messages you send to the bot and back. We will not do that, but it is technically possible.
-
-# 2: Slightly harder way (fully secure)
 Set up your own Telegram bot. This is fully secure and private, since you are the only one who can access the message archive.
 
 Before you can use this app, you first have to follow the steps on the Settings page in Homey.
 
-# Built in commands
-- /say ...
-Fill in something on the dots to make Homey say it.
-- ping
-Receive 'pong'
-- pong
-Receive 'ping'
+# Built in commands for testing
+- If you send a message with the text 'ping', you should receive 'pong'
+- If you send a message with the text 'pong', you should receive 'ping'
 
 
 # Changelog
+
+**Version 2.0**
+- BREAKING CHANGE: SDK v3 version requires us to drop the 'less secure' shared bot. It is now required to set up your own Telegram bot, which is fully 
+secure.
+- BREAKING CHANGE: /say command removed (not supported in future Homey editions)
 
 **Version 0.3.4**
 - Fix for app crashing

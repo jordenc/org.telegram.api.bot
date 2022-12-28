@@ -6,58 +6,60 @@
 </head>
 <body>
 
-<h1 data-i18n="settings.title"></h1>
-
-<div id="unregistered">
-	<p data-i18n="settings.info"></p>
-
-	<input class="device_id" type="text" value="/register 12345">
-</div>
-
-&nbsp;<br/>
-<hr>
-
+<header class="homey-header">
+	<h1 class="homey-title" data-i18n="settings.title"></h1>
+</header>
 <div id="delete_bot">
-	<button id="deletebot" data-i18n="settings.delete_bot"></button>
+	<button id="deletebot" class="homey-button-danger-shadow" data-i18n="settings.delete_bot"></button>
 </div>
 
 <div id="own_bot">
 	<h2 data-i18n="settings.own_bot"></h2>
 	<p data-i18n="settings.own_bot_description"></p>
-	<ul>
-		<li class='own_bot_1' data-i18n="settings.step1"></li>
-		<li class='own_bot_1' data-i18n="settings.step2"></li>
-		<li class='own_bot_1' data-i18n="settings.step3"></li>
-		<li class='own_bot_1' data-i18n="settings.step4"></li>
-		<li class='own_bot_1' data-i18n="settings.step5"></li>
-		<div class='own_bot_1'><span data-i18n="settings.token"></span>: <input type="text" name="token" id="token" value=""><button type="submit" id="submit" data-i18n="settings.save"></button></div>
-		<li class='own_bot_1' data-i18n="settings.step6"></li>
-		<li data-i18n="settings.step7"></li>
-		<li data-i18n="settings.step8"></li>
-		
-	</ul>
+
+	<div class='own_bot_1' data-i18n="settings.step1"></div>
+	<div class='own_bot_1' data-i18n="settings.step2"></div>
+	<div class='own_bot_1' data-i18n="settings.step3"></div>
+	<div class='own_bot_1' data-i18n="settings.step4"></div>
+	<div class='own_bot_1' data-i18n="settings.step5"></div>
+	<div class='own_bot_1' data-i18n="settings.step6"></div>
+	<div class='own_bot_1'>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="token" data-i18n="settings.token">:</label>
+			<input class="homey-form-input" id="token" type="text" name="token" value=""/>
+		</div>
+
+		<button type="submit" id="submit" class="homey-button-primary-shadow-full" data-i18n="settings.save"></button>
+	</div><br/><br/>
+	<div data-i18n="settings.step7"></div>
+	<div data-i18n="settings.step8"></div>
+
 </div>
 
 &nbsp;<br/>
 <hr>
 
 <div id="renew_webhook">
-	<button id="renewhook" data-i18n="settings.renew_webhook"></button>
+	<button id="renewhook" class="homey-button-secondary-shadow" data-i18n="settings.renew_webhook"></button>
 </div>
 
 &nbsp;<br/>
 <hr>
 
-<div id="connected_users">
-	
-	<h2 data-i18n="settings.connected_users"></h2>
-	
-	<div id="connected_users_list"></div>
-	
-</div>
+<header class="homey-header">
+	<div id="connected_users">
+
+		<h1 class="homey-title" data-i18n="settings.connected_users"></h1>
+
+		<input class='device_id2 homey-form-input' type='text' value='/register 12345'><button class='copy_text2 homey-button-secondary-shadow' data-i18n="settings.copy"></button><br/><br/>
+
+		<div id="connected_users_list"></div>
+		<button class="homey-button-secondary-shadow" data-i18n="settings.reload"></button>
+
+	</div>
+</header>
 
 &nbsp;<br/>
-<hr>
 
 <div id="showlog">
 	Log
@@ -74,6 +76,7 @@
         Homey.get("device_id", function (err, value) {
             if (value) {
                 $('.device_id').val('/register ' + value);
+                $('.device_id2').val('/register ' + value);
             }
         });
 	    
@@ -99,13 +102,13 @@
 		    
 		    for (var key in chat_ids) {
 			    
-			    var html = '<div class="span_' + key + '"> ' + chat_ids[key].name + ' ';
+			    var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' ' + chat_ids[key].name + ' ';
 			    if (typeof chat_ids[key].description !== 'undefined') {
 				    
 				    html += ' (Group) ';
 				    
 			    }
-			    html += '<a href="#" class="delete" data-id="' + key + '">' + __('settings.delete') + '</a>';
+			    html += '</a><br/><br/>';
 				html += '</div>';
 				
 				$('#connected_users_list').append (html);
@@ -113,13 +116,61 @@
 			}
 		    
 		});
-		
-		
-		Homey.on('log_new', (result)=>{
-           
-           $('#textlog').prepend (result.time + ': ' + result.string + "\n")
-        })
-		
+
+		$('body').on('click', '.reload', function () {
+
+			Homey.get("chat_ids", function (err, chat_ids) {
+
+				('#connected_users_list').html('');
+				for (var key in chat_ids) {
+
+					var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' ' + chat_ids[key].name + ' ';
+					if (typeof chat_ids[key].description !== 'undefined') {
+
+						html += ' (Group) ';
+
+					}
+					html += '</a><br/><br/>';
+					html += '</div>';
+
+					$('#connected_users_list').append (html);
+
+				}
+
+			});
+		})
+
+		$('body').on('click', '.copy_text', function() {
+
+			var copyTextarea = document.querySelector('.device_id');
+			copyTextarea.focus();
+			copyTextarea.select();
+
+			try {
+				var successful = document.execCommand('copy');
+				var msg = successful ? 'successful' : 'unsuccessful';
+				console.log('Copying text command was ' + msg);
+			} catch (err) {
+				console.log('Oops, unable to copy');
+			}
+
+		});
+		$('body').on('click', '.copy_text2', function() {
+
+			var copyTextarea = document.querySelector('.device_id2');
+			copyTextarea.focus();
+			copyTextarea.select();
+
+			try {
+				var successful = document.execCommand('copy');
+				var msg = successful ? 'successful' : 'unsuccessful';
+				console.log('Copying text command was ' + msg);
+			} catch (err) {
+				console.log('Oops, unable to copy');
+			}
+
+		});
+
 		$('body').on('click', '.delete', function () {
 			
 			var remove_key = $(this).data('id');
@@ -157,26 +208,7 @@
 			});
 			
 		});
-		
-		function renew_log() {
-			
-			var logs = reverse_log();
-			
-			for (var key in logs) {
-				
-				$('#textlog').append (logs[key].time + ': ' + logs[key].string + "\n");
-				
-			}
-			
-			
-		}
-		
-		function reverse_log() {
-			
-	        return this.log.slice().reverse();
-	    
-	    }
-		
+
 		$('body').on('click', '#renewhook', function() {
 			
 			Homey.api('PUT', '/renew_webhook', {}, function( err, result ) {
@@ -195,8 +227,8 @@
 		});
 	    
 	    $('#submit').on('click', function() {
-		
-			 Homey.api( 'PUT', '/addbot/', {
+
+			 Homey.api( 'PUT', '/addbot', {
 				 
 				"bot_token": $('#token').val()
 				 
@@ -244,9 +276,7 @@
 			});
 			
 	    });
-	    
-	    renew_log();
-	    
+
     }
 </script>
 
