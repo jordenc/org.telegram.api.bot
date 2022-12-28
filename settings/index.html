@@ -124,7 +124,7 @@
 				$('#connected_users_list').html('');
 				for (var key in chat_ids) {
 
-					var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' ' + chat_ids[key].name + ' ';
+					var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' #' + chat_ids[key].chat_id + ' ' + chat_ids[key].name + ' ';
 					if (typeof chat_ids[key].description !== 'undefined') {
 
 						html += ' (Group) ';
