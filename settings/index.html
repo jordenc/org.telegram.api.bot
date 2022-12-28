@@ -54,7 +54,7 @@
 		<input class='device_id2 homey-form-input' type='text' value='/register 12345'><button class='copy_text2 homey-button-secondary-shadow' data-i18n="settings.copy"></button><br/><br/>
 
 		<div id="connected_users_list"></div>
-		<button class="homey-button-secondary-shadow" data-i18n="settings.reload"></button>
+		<button class="homey-button-secondary-shadow reload" data-i18n="settings.reload"></button>
 
 	</div>
 </header>
@@ -102,7 +102,7 @@
 		    
 		    for (var key in chat_ids) {
 			    
-			    var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' ' + chat_ids[key].name + ' ';
+			    var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' #' + chat_ids[key].chat_id + ' ' + chat_ids[key].name + ' ';
 			    if (typeof chat_ids[key].description !== 'undefined') {
 				    
 				    html += ' (Group) ';
@@ -121,7 +121,7 @@
 
 			Homey.get("chat_ids", function (err, chat_ids) {
 
-				('#connected_users_list').html('');
+				$('#connected_users_list').html('');
 				for (var key in chat_ids) {
 
 					var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' ' + chat_ids[key].name + ' ';

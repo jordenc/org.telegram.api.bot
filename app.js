@@ -208,15 +208,62 @@ class App extends Homey.App {
 
 							if (chat_ids != null) {
 
-								let obj = chat_ids.find(o => o.chat_id === args.body.message.chat.id);
+								let obj = chat_ids.find(o => o.chat_id == args.body.message.chat.id);
+
+								console.log("XXX Done scanning, obj = " + typeof obj);
+
+								if (typeof obj === "undefined") {
+
+									if (typeof args.body.message.chat.type !== undefined && args.body.message.chat.type == 'group') {
+
+										chat_ids.push({
+											image: 'https://telegram.org/img/t_logo.png',
+											name: args.body.message.chat.title,
+											description: this.homey.__("group"),
+											chat_id: args.body.message.chat.id
+										});
+
+									} else {
+
+										if (typeof args.body.message.from.last_name !== "undefined") {
+
+											var name = args.body.message.from.first_name + ' ' + args.body.message.from.last_name
+
+										} else {
+
+											var name = args.body.message.from.first_name
+
+										}
+
+										chat_ids.push({
+											image: 'https://telegram.org/img/t_logo.png',
+											name: name,
+											chat_id: args.body.message.chat.id
+										});
+
+									}
+
+									console.log('chat_id added: ' + args.body.message.chat.id);
+
+									this.homey.settings.set('chat_ids', chat_ids);
+
+									console.log('[chat_ids] ' + JSON.stringify(chat_ids));
+
+									this.unregister_webhook();
+									this.register_webhook();
+
+									sendchat(custom_bot, this.homey.__("registered"), args.body.message.chat.id);
+
+								} else {
+
+									console.log("Already exists");
+									sendchat(custom_bot, this.homey.__("already_registered"), args.body.message.chat.id);
+
+								}
 
 							} else {
 
 								chat_ids = [];
-
-							}
-
-							if (typeof obj === "undefined") {
 
 								if (typeof args.body.message.chat.type !== undefined && args.body.message.chat.type == 'group') {
 
@@ -257,10 +304,6 @@ class App extends Homey.App {
 								this.register_webhook();
 
 								sendchat(custom_bot, this.homey.__("registered"), args.body.message.chat.id);
-
-							} else {
-
-								sendchat(custom_bot, this.homey.__("already_registered"), args.body.message.chat.id);
 
 							}
 
