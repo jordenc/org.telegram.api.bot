@@ -61,7 +61,11 @@ module.exports =
 
        var custom_bot = homey.settings.get('bot_token');
 
-       const result = await fetch('https://api.telegram.org/bot' + custom_bot + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+       if (custom_bot) {
+           const result = await fetch('https://api.telegram.org/bot' + custom_bot + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+       } else {
+           const result = await fetch('https://telegram.corbata.nl/?action=sendMessage&chat_id=' + chat_id + '&text=' + encodeURIComponent(message));
+       }
 
        if(!result.ok) {
            console.log('Response:', await result.text());

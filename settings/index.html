@@ -9,6 +9,18 @@
 <header class="homey-header">
 	<h1 class="homey-title" data-i18n="settings.title"></h1>
 </header>
+
+<h1 data-i18n="settings.title"></h1>
+
+<div id="unregistered">
+	<p data-i18n="settings.info"></p>
+
+	<input class="homey-form-input device_id" type="text" value="/register 12345" readonly="readonly"><button class='copy_text homey-button-secondary-shadow' data-i18n="settings.copy"></button>
+</div>
+
+&nbsp;<br/>
+<hr>
+
 <div id="delete_bot">
 	<button id="deletebot" class="homey-button-danger-shadow" data-i18n="settings.delete_bot"></button>
 </div>
@@ -51,7 +63,7 @@
 
 		<h1 class="homey-title" data-i18n="settings.connected_users"></h1>
 
-		<input class='device_id2 homey-form-input' type='text' value='/register 12345'><button class='copy_text2 homey-button-secondary-shadow' data-i18n="settings.copy"></button><br/><br/>
+		<input class='device_id2 homey-form-input' type='text' value='/register 12345' readonly="readonly"><button class='copy_text2 homey-button-secondary-shadow' data-i18n="settings.copy"></button><br/><br/>
 
 		<div id="connected_users_list"></div>
 		<button class="homey-button-secondary-shadow reload" data-i18n="settings.reload"></button>
@@ -61,10 +73,12 @@
 
 &nbsp;<br/>
 
+<!--
 <div id="showlog">
 	Log
 	<textarea id="textlog" style="width: 100%" rows="20"></textarea>
 </div>
+-->
 
 <script type="text/javascript">
 

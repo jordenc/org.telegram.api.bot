@@ -39,13 +39,7 @@ class App extends Homey.App {
 			console.log('Not yet registered with chat_ids');
 			chat_ids = [];
 		} else {
-
 			console.log('We still remembered chat_ids: ' + JSON.stringify(chat_ids));
-
-			if (! custom_bot) {
-				await this.homey.notifications.createNotification ({excerpt:`BREAKING CHANGE: Your custom Telegram Bot is not setup. The shared bot no longer works. To continue using this app, go to the Telegram settings in Homey to set up your custom Telegram bot. See forum for details: https://community.homey.app/t/telegram-bot-v2-0-0/74243` });
-			}
-
 		}
 		/*
 		if (custom_bot_token) {
@@ -129,11 +123,19 @@ class App extends Homey.App {
 					}
 				}*/
 
-				const response = await fetch("https://api.telegram.org/bot" + bot_token + "/sendPhoto", {
-					method: 'POST',
-					body: form.pipe(new PassThrough()),
-					headers: form.getHeaders(),
-				});
+				if (bot_token) {
+					var response = await fetch("https://api.telegram.org/bot" + bot_token + "/sendPhoto", {
+						method: 'POST',
+						body: form.pipe(new PassThrough()),
+						headers: form.getHeaders(),
+					});
+				} else {
+					var response = await fetch("https://telegram.corbata.nl/?action=sendPhoto", {
+						method: 'POST',
+						body: form.pipe(new PassThrough()),
+						headers: form.getHeaders(),
+					});
+				}
 
 				if (!response.ok) {
 					console.log('Response:', await response.text());
@@ -354,7 +356,11 @@ class App extends Homey.App {
 
 async function sendchat (bot_token, message, chat_id) {
 
-	const result = await fetch('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+	if (bot_token) {
+		var result = await fetch('https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+	} else {
+		var result = await fetch('https://telegram.corbata.nl/?action=sendMessage&chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
+	}
 
 	if(!result.ok) {
 		console.log('Response:', await result.text());
