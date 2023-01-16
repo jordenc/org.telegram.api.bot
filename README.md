@@ -14,8 +14,6 @@ Before you can use this app, you first have to follow the steps on the Settings 
 # Changelog
 
 **Version 2.0**
-- BREAKING CHANGE: SDK v3 version requires us to drop the 'less secure' shared bot. It is now required to set up your own Telegram bot, which is fully 
-secure.
 - BREAKING CHANGE: /say command removed (not supported in future Homey editions)
 
 **Version 0.3.4**

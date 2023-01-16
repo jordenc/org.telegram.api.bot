@@ -236,7 +236,7 @@ class App extends Homey.App {
 											var name = args.body.message.from.first_name
 
 										}
-										
+
 										chat_ids.push({
 											image: 'https://telegram.org/img/t_logo.png',
 											name: name,
