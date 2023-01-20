@@ -5,7 +5,7 @@ module.exports =
 {
     async addbot({homey, body: {bot_token}}){
 
-        const result = await fetch('https://api.telegram.org/bot' + bot_token + '/setWebhook?url=https://webhooks.athom.com/webhook/' + homey.env.CLIENT_ID);
+        const result = await fetch('https://api.telegram.org/bot' + bot_token + '/setWebhook?url=https://webhooks.athom.com/webhook/' + Homey.env.CLIENT_ID);
 
         if(!result.ok) {
             console.log('Response:', await result.text());

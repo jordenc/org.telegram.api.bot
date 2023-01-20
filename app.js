@@ -69,6 +69,7 @@ class App extends Homey.App {
 		this.sendMessage = this.homey.flow.getActionCard('sendmessage')
 			.registerRunListener(async (args) => {
 
+				var custom_bot = this.homey.settings.get('bot_token');
 				console.log('[SEND CHAT] ' + JSON.stringify(args));
 
 				if (typeof args.to === "undefined" || typeof args.to.chat_id === "undefined")
