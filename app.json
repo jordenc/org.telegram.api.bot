@@ -1,145 +1,145 @@
 {
-    "id": "org.telegram.api.bot",
-    "name": {
-        "en": "Telegram Bot",
-        "nl": "Telegram Bot"
-    },
-    "sdk": 3,
-    "brandColor": "#2fa6d9",
-    "version": "1.0.0",
-    "compatibility": ">=5.0.0",
-	"description": {
-    	"en": "Send and receive messages and images on Telegram with Homey",
-		"nl": "Verstuur en ontvang berichten en afbeeldingen op Telegram met Homey",
-		"de": "Senden und Empfangen von Nachrichten und Bildern per Telegramm mit Homey"
-  	},
-  	"author": {
-    	"name": "Corbata",
-		"email": "info@corbata.nl"
-  	},
-	"homeyCommunityTopicId": 74243,
-  	"contributing": {
-	    "donate": {
-	        "paypal": {
-	            "email": "info@chamidmedia.nl"
-	        }
-	    }
-	},
-  	"images": {
-	  	"small": "assets/images/small.png",
-	  	"large": "assets/images/large.png"
-  	},
-  	"category": "internet",
-	"flow": {
-		"triggers": [
-	      {
-	        "id": "incomingmessage",
-	        "title": {
-	          "en": "A message was received",
-	          "nl": "Een bericht werd ontvangen",
-	          "de": "Eine Nachricht wurde empfangen"
-	        },
-	        "tokens": [
-	            {
-	                "name": "message",
-	                "title": {
-	                    "en": "text",
-	                    "nl": "tekst",
-	                    "de": "text"
-	                },
-					"type": "string",
-	                "example": "test"
-	            },
-	            {
-	                "name": "user",
-	                "title": {
-	                    "en": "user",
-	                    "nl": "gebruiker",
-	                    "de": "Benutzer"
-	                },
-					"type": "string",
-	                "example": "user"
-	            }
-	        ]
-	      }
-	    ],
-	    "actions": [
-        {
-            "id": "sendmessage",
-            "title": {
-                "en": "Send a message",
-                "nl": "Stuur een bericht",
-                "de": "Sende eine Nachricht"
-            },
-			"titleFormatted": {
-				"en": "Send [[text]] to [[to]]",
-				"nl": "Stuur [[text]] naar [[to]]",
-				"de": "Sende [[text]] an [[to]]"
-			},
-            "args": [
-	              {
-		              "name": "to",
-		              "type": "autocomplete",
-		              "placeholder": {
-			              "en": "Receiver name",
-			              "nl": "Naam ontvanger",
-			              "de": "Empfänger Name"
-		              }
-	              },
-	              {
-		              "name": "text",
-		              "type": "text",
-		              "placeholder": {
-			              "en": "Message",
-			              "nl": "Bericht",
-			              "de": "Nachricht"
-		              }
-	              }
-	        ]
+  "id": "org.telegram.api.bot",
+  "name": {
+    "en": "Telegram Bot",
+    "nl": "Telegram Bot"
+  },
+  "sdk": 3,
+  "brandColor": "#2fa6d9",
+  "version": "1.0.1",
+  "compatibility": ">=5.0.0",
+  "description": {
+    "en": "Send and receive messages and images on Telegram with Homey",
+    "nl": "Verstuur en ontvang berichten en afbeeldingen op Telegram met Homey",
+    "de": "Senden und Empfangen von Nachrichten und Bildern per Telegramm mit Homey"
+  },
+  "author": {
+    "name": "Corbata",
+    "email": "info@corbata.nl"
+  },
+  "homeyCommunityTopicId": 74243,
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "email": "info@chamidmedia.nl"
+      }
+    }
+  },
+  "images": {
+    "small": "assets/images/small.png",
+    "large": "assets/images/large.png"
+  },
+  "category": "internet",
+  "flow": {
+    "triggers": [
+      {
+        "id": "incomingmessage",
+        "title": {
+          "en": "A message was received",
+          "nl": "Een bericht werd ontvangen",
+          "de": "Eine Nachricht wurde empfangen"
         },
-        {
-            "id": "sendimage",
+        "tokens": [
+          {
+            "name": "message",
             "title": {
-                "en": "Send a picture",
-                "nl": "Stuur een afbeelding",
-                "de": "Sende ein Bild"
+              "en": "text",
+              "nl": "tekst",
+              "de": "text"
             },
-			"titleFormatted": {
-				"en": "Send [[droptoken]] to [[to]]",
-				"nl": "Stuur [[droptoken]] naar [[to]]",
-				"de": "Sende [[droptoken]] an [[to]]"
-			},
-            "droptoken": "image",
-            "args": [
-            	{
-	              "name": "to",
-	              "type": "autocomplete",
-	              "placeholder": {
-		              "en": "Receiver name",
-		              "nl": "Naam ontvanger",
-			      "de": "Empfänger Name"
-	              }
-	        	}
-	        ]
-        }
-       ]
-	},
-	"api": {
-		"addbot": {
-			"method": "PUT",
-			"path": "/addbot"
-		},
-		"deletebot": {
-			"method": "PUT",
-			"path": "/deletebot"
-		},
-		"renew_webhook": {
-			"method": "PUT",
-			"path": "/renew_webhook"
-		},
-		"send_message": {
-			"method": "GET",
-			"path": "/send_message"
-		}
-	}
+            "type": "string",
+            "example": "test"
+          },
+          {
+            "name": "user",
+            "title": {
+              "en": "user",
+              "nl": "gebruiker",
+              "de": "Benutzer"
+            },
+            "type": "string",
+            "example": "user"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "sendmessage",
+        "title": {
+          "en": "Send a message",
+          "nl": "Stuur een bericht",
+          "de": "Sende eine Nachricht"
+        },
+        "titleFormatted": {
+          "en": "Send [[text]] to [[to]]",
+          "nl": "Stuur [[text]] naar [[to]]",
+          "de": "Sende [[text]] an [[to]]"
+        },
+        "args": [
+          {
+            "name": "to",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Receiver name",
+              "nl": "Naam ontvanger",
+              "de": "Empfänger Name"
+            }
+          },
+          {
+            "name": "text",
+            "type": "text",
+            "placeholder": {
+              "en": "Message",
+              "nl": "Bericht",
+              "de": "Nachricht"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sendimage",
+        "title": {
+          "en": "Send a picture",
+          "nl": "Stuur een afbeelding",
+          "de": "Sende ein Bild"
+        },
+        "titleFormatted": {
+          "en": "Send [[droptoken]] to [[to]]",
+          "nl": "Stuur [[droptoken]] naar [[to]]",
+          "de": "Sende [[droptoken]] an [[to]]"
+        },
+        "droptoken": "image",
+        "args": [
+          {
+            "name": "to",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Receiver name",
+              "nl": "Naam ontvanger",
+              "de": "Empfänger Name"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "addbot": {
+      "method": "PUT",
+      "path": "/addbot"
+    },
+    "deletebot": {
+      "method": "PUT",
+      "path": "/deletebot"
+    },
+    "renew_webhook": {
+      "method": "PUT",
+      "path": "/renew_webhook"
+    },
+    "send_message": {
+      "method": "GET",
+      "path": "/send_message"
+    }
+  }
 }
