@@ -4,5 +4,8 @@
   },
   "1.0.1": {
     "en": "SDK3 version"
+  },
+  "1.1.0": {
+    "en": "Updated sendPhoto function"
   }
 }
