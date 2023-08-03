@@ -94,37 +94,16 @@ class App extends Homey.App {
 				if (typeof image === "undefined" || image == null) {
 					return false;
 				}
-
-				const form = new FormData();
-				form.append('chat_id', args.to.chat_id);
-
-				//if (image.getStream) {
-
-					console.log("get stream");
-
-					const stream = await image.getStream();
-					form.append('photo', stream, {
-						contentType: stream.contentType,
-						filename: stream.filename,
-						name: 'photo',
-					});
-				/*} else {//backwards compatibility
-
-					const buf = await image.getBuffer();
-
-					if (typeof buf === 'string') {
-						form.append('photo', buf);
-					} else {
-
-						form.append('photo', buf, {
-							contentType: CONTENT_TYPES[image.getFormat()],
-							filename: 'x.' + image.getFormat(),
-							name: 'photo',
-						});
-					}
-				}*/
+				
+				var url = args.droptoken.cloudUrl ?? "https://" + await app.homey.cloud.getHomeyId() + ".connect.athom.com/api/image/" + args.droptoken.id;
 
 				if (bot_token) {
+					var response = await fetch('https://api.telegram.org/bot' + bot_token + '/sendPhoto?chat_id=' + args.to.chat_id + '&photo=' + url);
+				} else {
+					var response = await fetch('https://telegram.corbata.nl/?action=sendPhoto&chat_id=' + args.to.chat_id + '&url=' + url);
+				}
+				console.log("send to telegram")
+				/*if (bot_token) {
 					var response = await fetch("https://api.telegram.org/bot" + bot_token + "/sendPhoto", {
 						method: 'POST',
 						body: form.pipe(new PassThrough()),
@@ -137,6 +116,8 @@ class App extends Homey.App {
 						headers: form.getHeaders(),
 					});
 				}
+				*/
+				console.log('response', response);
 
 				if (!response.ok) {
 					console.log('Response:', await response.text());
