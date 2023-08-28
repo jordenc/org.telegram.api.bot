@@ -7,5 +7,8 @@
   },
   "1.1.0": {
     "en": "Updated sendPhoto function"
+  },
+  "1.2.0": {
+    "en": "Updated sending images"
   }
 }
