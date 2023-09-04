@@ -10,5 +10,8 @@
   },
   "1.2.0": {
     "en": "Updated sending images"
+  },
+  "1.2.1": {
+    "en": "Fix for sending images with own bot"
   }
 }
