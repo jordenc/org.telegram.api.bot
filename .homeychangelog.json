@@ -13,5 +13,8 @@
   },
   "1.2.1": {
     "en": "Fix for sending images with own bot"
+  },
+  "1.2.2": {
+    "en": "Revert back to previous code"
   }
 }
