@@ -204,7 +204,7 @@ class App extends Homey.App {
 	//
 	// Own bot:    Homey polls Telegram directly (getUpdates), no cloud in between.
 	// Shared bot: Telegram -> telegram.corbata.nl (knows which chat belongs to which Homey)
-	//             -> Athom webhook with ?token=<device_id> -> this Homey ($key).
+	//             -> Athom webhook, routed on homey_device_id in the body (Key Path) -> this Homey ($key).
 	// ---------------------------------------------------------------------------------------------
 
 	// Connection changes are queued, so they never run at the same time
@@ -277,7 +277,7 @@ class App extends Homey.App {
 		const device_id = this.homey.settings.get('device_id');
 
 		const data = {
-			// Athom routes on ?token=<device_id> in the webhook URL
+			// Athom routes on homey_device_id in the body that the relay forwards (Key Path)
 			$key: device_id,
 			// Still used by the legacy cloud function until Athom switches routing
 			device_id: device_id,
