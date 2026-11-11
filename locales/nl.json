@@ -10,7 +10,7 @@
 		"step3": "3. Na het aanmaken ontvangt u een <i>token</i>. Kopieer de token naar het veld hieronder.",
 		"step4": "4. Stel de privacy in met /setprivacy (staat standaard goed, maar kan geen kwaad om extra na te kijken)",
 		"step5": "5. Als je een prive bot hebt gemaakt in Telegram, kan de bot standaard toegevoegd worden aan groepen. Om dit uit te schakelen stuur je '/setjoingroups' naar BotFather, selecteer de privebot en zet het op 'Disable'. Om het mogelijk te houden om een privebot in groepen toe te voegen hou je het op 'Enable'",
-		"step6": "6. Gebruik de knop hieronder om het op te slaan. Homey zal een connectie maken naar de Telegram bot en een 'webhook' instellen zodat Telegram berichten doorgeeft aan Homey.",
+		"step6": "6. Gebruik de knop hieronder om het op te slaan. Homey maakt direct verbinding met je Telegram bot om berichten te ontvangen, zonder server ertussen.",
 		"step7": "7. Stuur het registreer-commando naar de Homey bot: <input class='device_id homey-form-input' type='text' value='/register 12345' readonly=\"readonly\"><button class='copy_text homey-button-secondary-shadow'>Kopieer</button><br/><br/>",
 		"step8": "8. Stuur een bericht 'ping' naar de bot. Als alles goed is gegaan, ontvangt u een bericht 'pong' van Homey op Telegram!",
 		"token": "Token",
@@ -24,11 +24,26 @@
 		"renew_webhook": "Webhook opnieuw aanmelden",
 		"refresh_log": "Refresh log",
 		"copy": "Kopieer",
-		"reload": "Herladen"
+		"reload": "Herladen",
+		"group": "Groep",
+		"error": "Fout",
+		"renewed": "Webhook succesvol opnieuw aangemeld",
+		"api_title": "Web API",
+		"api_description": "Verstuur een bericht vanuit andere systemen met een simpel HTTP verzoek. Parameters: <b>key</b> (de API sleutel hieronder), <b>to</b> (chat_id of naam van een gekoppelde gebruiker/groep, optioneel als er maar een gekoppeld is) en <b>text</b>. Zowel GET (query string) als POST (JSON body) worden ondersteund. Houd de sleutel geheim: iedereen met de sleutel kan berichten sturen naar je gekoppelde chats.",
+		"api_key": "API sleutel",
+		"api_local": "Lokaal netwerk",
+		"api_cloud": "Via Homey cloud",
+		"api_regenerate": "Nieuwe API sleutel genereren",
+		"are_you_sure_api_key": "Weet je het zeker? Bestaande koppelingen met de huidige sleutel werken dan niet meer."
 	},
 	"unregistered": "Loskoppelen is gelukt",
 	"registered": "Homey is succesvol aan de Telegram chat gekoppeld",
-	"help": "Helptekst komt binnenkort!",
+	"help": "Beschikbare commando's:\n/register <code> - koppel deze chat aan Homey\nping - Homey antwoordt met pong\n\nAlle andere berichten starten de flowkaart 'Een bericht werd ontvangen'.",
 	"group": "Groep",
-	"already_registered": "Deze chat is reeds gekoppeld aan Homey"
+	"already_registered": "Deze chat is reeds gekoppeld aan Homey",
+	"errors": {
+		"unknown_receiver": "Deze ontvanger is niet (meer) gekoppeld, selecteer hem opnieuw in de flowkaart",
+		"no_image": "Er is geen afbeelding opgegeven"
+	},
+	"relay_reregister": "Homey is bijgewerkt en vraagt je deze chat nog een keer te bevestigen. Stuur dit bericht om berichten uit deze chat op Homey te blijven ontvangen:\n\n__code__"
 }

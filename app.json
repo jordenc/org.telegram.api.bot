@@ -7,7 +7,7 @@
   "sdk": 3,
   "brandColor": "#2fa6d9",
   "version": "1.2.2",
-  "compatibility": ">=5.0.0",
+  "compatibility": ">=12.9.0",
   "description": {
     "en": "Send and receive messages and images on Telegram with Homey",
     "nl": "Verstuur en ontvang berichten en afbeeldingen op Telegram met Homey",
@@ -137,9 +137,23 @@
       "method": "PUT",
       "path": "/renew_webhook"
     },
+    "api_info": {
+      "method": "GET",
+      "path": "/api_info"
+    },
+    "regenerate_api_key": {
+      "method": "PUT",
+      "path": "/regenerate_api_key"
+    },
     "send_message": {
       "method": "GET",
-      "path": "/send_message"
+      "path": "/send_message",
+      "public": true
+    },
+    "send_message_post": {
+      "method": "POST",
+      "path": "/send_message",
+      "public": true
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "name": "org.telegram.api.bot",
+  "version": "1.2.2",
+  "description": "Send and receive messages and images on Telegram with Homey",
+  "main": "app.js",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
+}

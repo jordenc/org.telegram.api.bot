@@ -1,79 +1,100 @@
-const Homey 		= require('homey');
-const fetch 		= require('node-fetch');
+'use strict';
 
-module.exports =
-{
-    async addbot({homey, body: {bot_token}}){
+const telegram = require('./lib/telegram');
 
-        const result = await fetch('https://api.telegram.org/bot' + bot_token + '/setWebhook?url=https://webhooks.athom.com/webhook/' + Homey.env.CLIENT_ID);
+// Shared handler for GET (query string) and POST (JSON body) on /send_message
+async function handle_send_message(homey, query, body) {
 
-        if(!result.ok) {
-            console.log('Response:', await result.text());
-            return ('Error ' + result.response.statusCode + ': ' + result.data, false);
-        }
+	const input = Object.assign({}, query || {}, (body && typeof body === 'object') ? body : {});
 
-        const body = await result.json();
-        if (result.ok && body && body.ok === true){
+	homey.app.check_api_key(input.key);
 
-            homey.settings.set('bot_token', bot_token);
+	if (input.text === undefined || input.text === null || String(input.text) === '') {
+		throw new Error('Parameter "text" is required');
+	}
 
-            return true;
+	const chat = homey.app.find_chat(input.to);
+	const result = await homey.app.send_text(chat.chat_id, input.text);
 
-        }
-
-    },
-
-    async deletebot({homey, args}){
-
-       const result = await fetch('https://api.telegram.org/bot' + homey.settings.get('bot_token') + '/setWebhook?url=');
-
-        if(!result.ok) {
-            console.log('Response:', await result.text());
-            return false;
-        }
-
-        const body = await result.json();
-        if (result.ok && body && body.ok === true){
-
-            homey.settings.set('bot_token', '');
-            return true;
-
-        }
-
-    },
-
-    async renew_webhook({homey, args}){
-
-       var result = await homey.app.unregister_webhook();
-
-       var result = await homey.app.register_webhook();
-
-       return result;
-
-    },
-
-    async send_message({homey, args}){
-
-       console.log ("received: " + JSON.stringify(args));
-
-       var chat_id = args.query.to;
-       var message = args.query.text;
-
-       var custom_bot = homey.settings.get('bot_token');
-
-       if (custom_bot) {
-           const result = await fetch('https://api.telegram.org/bot' + custom_bot + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + encodeURIComponent(message));
-       } else {
-           const result = await fetch('https://telegram.corbata.nl/?action=sendMessage&chat_id=' + chat_id + '&text=' + encodeURIComponent(message));
-       }
-
-       if(!result.ok) {
-           console.log('Response:', await result.text());
-           return false;
-       }
-
-       const body = await result.json();
-       return (result.ok && body && body.ok === true);
-
-    }
+	return {
+		ok: true,
+		chat_id: chat.chat_id,
+		message_id: result ? result.message_id : null
+	};
 }
+
+module.exports = {
+
+	async addbot({ homey, body }) {
+
+		const bot_token = String((body && body.bot_token) || '').trim();
+
+		if (!/^\d+:[\w-]+$/.test(bot_token)) {
+			throw new Error('This does not look like a valid bot token (format: 123456:ABC-DEF...)');
+		}
+
+		// Checks the token, throws "Telegram: Unauthorized" when it is wrong
+		await telegram.get_me(bot_token);
+
+		// Homey receives messages with long polling, which does not work while a webhook is set
+		await telegram.delete_webhook(bot_token);
+
+		// The app picks this up and starts polling
+		homey.settings.set('bot_token', bot_token);
+
+		return true;
+	},
+
+	async deletebot({ homey }) {
+
+		// The app picks this up, stops polling and switches back to the shared bot
+		homey.settings.set('bot_token', '');
+
+		return true;
+	},
+
+	async renew_webhook({ homey }) {
+		await homey.app.renew_webhook();
+		return true;
+	},
+
+	// Used by the settings page to show the API key and example URLs
+	async api_info({ homey }) {
+
+		const path = '/api/app/' + homey.manifest.id + '/send_message';
+		let local_address = null;
+		let homey_id = null;
+
+		try {
+			local_address = await homey.cloud.getLocalAddress();
+		} catch (error) {
+			local_address = null;
+		}
+
+		try {
+			homey_id = await homey.cloud.getHomeyId();
+		} catch (error) {
+			homey_id = null;
+		}
+
+		return {
+			api_key: homey.settings.get('api_key'),
+			local_url: local_address ? 'http://' + local_address + path : null,
+			cloud_url: homey_id ? 'https://' + homey_id + '.connect.athom.com' + path : null
+		};
+	},
+
+	async regenerate_api_key({ homey }) {
+		return { api_key: homey.app.regenerate_api_key() };
+	},
+
+	// Public: GET /send_message?key=...&to=...&text=...
+	async send_message({ homey, query, body }) {
+		return handle_send_message(homey, query, body);
+	},
+
+	// Public: POST /send_message with JSON { key, to, text }
+	async send_message_post({ homey, query, body }) {
+		return handle_send_message(homey, query, body);
+	}
+};

@@ -10,7 +10,7 @@
 		"step3": "3. Nach dem Erstellen wird dir ein <i>Token</i> gegeben. Kopiere das Token und füge es hier in das Feld ein.",
 		"step4": "4. Setzte deine Privatsphäre-Einstellungen mit /setprivacy (ist standardmäßig aktiviert, was in Ordnung ist, aber nur um sicher zu gehen......).",
 		"step5": "5. Wenn ein privater Bot auf Telegram erstellt wird, kann der Bot standardmäßig zu Gruppen hinzugefügt werden. Um dies zu ändern, sende '/setjoingroups' an BotFather und stelle es auf 'Disable', oder lass es aktiviert, wenn du den Bot zu einem Gruppenchat hinzufügen möchtest.",
-		"step6": "6. Verwende den Butten, um dies zu speichern. Homey stellt eine Verbindung zum Telegram-Bot her und setzt einen 'Webhook', sodass Homey aufgerufen wird, wenn der Telegram-Bot eine Nachricht empfängt.",
+		"step6": "6. Verwende den Button unten, um dies zu speichern. Homey verbindet sich direkt mit deinem Telegram-Bot, um Nachrichten zu empfangen, ohne Server dazwischen.",
 		"step7": "7. Sende den Registrierungsbefehl an deinen Homey-Bot: <input class='device_id homey-form-input' type='text' value='/register 12345' readonly=\"readonly\"><button class='copy_text homey-button-secondary-shadow'>Kopieren</button><br/><br/>",
 		"step8": "8. Senden die Nachricht 'ping' an den Bot. Wenn alles in Ordnung ist, erhältst du von Homey 'pong'!",
 		"token": "Token",
@@ -24,11 +24,26 @@
 		"renew_webhook": "Webhook-Registrierung erneuern",
 		"refresh_log": "Log aktualisieren",
 		"copy": "Kopieren",
-		"reload": "Aktualisieren"
+		"reload": "Aktualisieren",
+		"group": "Gruppe",
+		"error": "Fehler",
+		"renewed": "Webhook erfolgreich erneuert",
+		"api_title": "Web-API",
+		"api_description": "Sende eine Nachricht aus anderen Systemen mit einer einfachen HTTP-Anfrage. Parameter: <b>key</b> (der API-Schlüssel unten), <b>to</b> (chat_id oder Name eines verbundenen Benutzers/einer Gruppe, optional wenn nur einer verbunden ist) und <b>text</b>. GET (Query-String) und POST (JSON-Body) werden unterstützt. Halte den Schlüssel geheim: jeder mit dem Schlüssel kann Nachrichten an deine verbundenen Chats senden.",
+		"api_key": "API-Schlüssel",
+		"api_local": "Lokales Netzwerk",
+		"api_cloud": "Über die Homey Cloud",
+		"api_regenerate": "Neuen API-Schlüssel erzeugen",
+		"are_you_sure_api_key": "Bist du sicher? Bestehende Integrationen mit dem aktuellen Schlüssel funktionieren dann nicht mehr."
 	},
 	"unregistered": "Erfolgreich abgemeldet",
 	"registered": "Homey wurde erfolgreich beim Telegram-Chat angemeldet",
-	"help": "Hilfetext folgt in Kürze",
+	"help": "Verfügbare Befehle:\n/register <Code> - diesen Chat mit Homey verbinden\nping - Homey antwortet mit pong\n\nAlle anderen Nachrichten lösen die Flow-Karte 'Eine Nachricht wurde empfangen' aus.",
 	"group": "Gruppe",
-	"already_registered": "Dieser Chat ist bereits mit Homey registriert."
+	"already_registered": "Dieser Chat ist bereits mit Homey registriert.",
+	"errors": {
+		"unknown_receiver": "Dieser Empfänger ist nicht (mehr) verbunden, bitte wähle ihn in der Flow-Karte erneut aus",
+		"no_image": "Es wurde kein Bild angegeben"
+	},
+	"relay_reregister": "Homey wurde aktualisiert und bittet dich, diesen Chat noch einmal zu bestätigen. Sende diese Nachricht, um weiterhin Nachrichten aus diesem Chat auf Homey zu empfangen:\n\n__code__"
 }

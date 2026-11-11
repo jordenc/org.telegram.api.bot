@@ -4,3 +4,4 @@ env.json
 # Added by Homey CLI
 /.homeybuild/
 /.idea/
+/node_modules/

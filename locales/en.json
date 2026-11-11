@@ -10,7 +10,7 @@
 		"step3": "3. When created a <i>token</i> is given to you. Copy the token, save it to the field below.",
 		"step4": "4. Set your privacy settings with /setprivacy (is default on enabled, which is ok, but just to be sure....)",
 		"step5": "5. When a private bot is made in Telegram, the bot can be added to groups by default. To change this send '/setjoingroups' in the chat with BotFather and set it to 'Disable', or leave it enabled if you want to be able to add the bot to a group chat.",
-		"step6": "6. Use the button below to save this. Homey will connect to the Telegram bot and set a 'webhook' so Homey will be called when the Telegram bot receives a message.",
+		"step6": "6. Use the button below to save this. Homey will connect directly to your Telegram bot to receive messages, without any server in between.",
 		"step7": "7. Send the register command to your Homey bot: <input class='device_id homey-form-input' type='text' value='/register 12345' readonly=\"readonly\"><button class='copy_text homey-button-secondary-shadow'>Copy</button><br/><br/>",
 		"step8": "8. Send a message 'ping' to the bot. If all is well, you will receive a message 'pong' from Homey!",
 		"token": "Token",
@@ -24,11 +24,26 @@
 		"renew_webhook": "Renew Webhook registration",
 		"refresh_log": "Refresh log",
 		"copy": "Copy",
-		"reload": "Reload"
+		"reload": "Reload",
+		"group": "Group",
+		"error": "Error",
+		"renewed": "Webhook renewed successfully",
+		"api_title": "Web API",
+		"api_description": "Send a message from other systems with a simple HTTP request. Parameters: <b>key</b> (the API key below), <b>to</b> (chat_id or name of a connected user/group, optional when only one is connected) and <b>text</b>. Both GET (query string) and POST (JSON body) are supported. Keep the key secret: anyone with the key can send messages to your connected chats.",
+		"api_key": "API key",
+		"api_local": "Local network",
+		"api_cloud": "Via Homey cloud",
+		"api_regenerate": "Generate new API key",
+		"are_you_sure_api_key": "Are you sure? Existing integrations using the current key will stop working."
 	},
 	"unregistered": "Unregistered succesfully",
 	"registered": "Homey registered to Telegram chat succesfully",
-	"help": "Helptext coming soon",
+	"help": "Available commands:\n/register <code> - connect this chat to Homey\nping - Homey answers with pong\n\nAll other messages trigger the flow card 'A message was received'.",
 	"group": "Group",
-	"already_registered": "This chat is already registered to Homey"
+	"already_registered": "This chat is already registered to Homey",
+	"errors": {
+		"unknown_receiver": "This receiver is not (or no longer) connected, please select it again in the flow card",
+		"no_image": "No image was provided"
+	},
+	"relay_reregister": "Homey was updated and needs you to confirm this chat once more. Please send this message to keep receiving messages from this chat on Homey:\n\n__code__"
 }

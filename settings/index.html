@@ -3,6 +3,9 @@
 <head>
 	<script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+	<style>
+		.api_url { word-break: break-all; font-family: monospace; font-size: 12px; }
+	</style>
 </head>
 <body>
 
@@ -10,42 +13,40 @@
 	<h1 class="homey-title" data-i18n="settings.title"></h1>
 </header>
 
-<h1 data-i18n="settings.title"></h1>
-
 <div id="unregistered">
 	<p data-i18n="settings.info"></p>
 
-	<input class="homey-form-input device_id" type="text" value="/register 12345" readonly="readonly"><button class='copy_text homey-button-secondary-shadow' data-i18n="settings.copy"></button>
+	<input class="homey-form-input device_id" type="text" value="/register 12345" readonly="readonly"><button class="copy_text homey-button-secondary-shadow" data-target=".device_id" data-i18n="settings.copy"></button>
 </div>
 
 &nbsp;<br/>
 <hr>
 
-<div id="delete_bot">
+<div id="delete_bot" style="display: none">
+	<p data-i18n="settings.already_registered_own_bot"></p>
 	<button id="deletebot" class="homey-button-danger-shadow" data-i18n="settings.delete_bot"></button>
 </div>
 
-<div id="own_bot">
+<div id="own_bot" style="display: none">
 	<h2 data-i18n="settings.own_bot"></h2>
 	<p data-i18n="settings.own_bot_description"></p>
 
-	<div class='own_bot_1' data-i18n="settings.step1"></div>
-	<div class='own_bot_1' data-i18n="settings.step2"></div>
-	<div class='own_bot_1' data-i18n="settings.step3"></div>
-	<div class='own_bot_1' data-i18n="settings.step4"></div>
-	<div class='own_bot_1' data-i18n="settings.step5"></div>
-	<div class='own_bot_1' data-i18n="settings.step6"></div>
-	<div class='own_bot_1'>
+	<div data-i18n="settings.step1"></div>
+	<div data-i18n="settings.step2"></div>
+	<div data-i18n="settings.step3"></div>
+	<div data-i18n="settings.step4"></div>
+	<div data-i18n="settings.step5"></div>
+	<div data-i18n="settings.step6"></div>
+	<div>
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="token" data-i18n="settings.token">:</label>
-			<input class="homey-form-input" id="token" type="text" name="token" value=""/>
+			<label class="homey-form-label" for="token" data-i18n="settings.token"></label>
+			<input class="homey-form-input" id="token" type="text" name="token" value="" autocomplete="off"/>
 		</div>
 
 		<button type="submit" id="submit" class="homey-button-primary-shadow-full" data-i18n="settings.save"></button>
 	</div><br/><br/>
 	<div data-i18n="settings.step7"></div>
 	<div data-i18n="settings.step8"></div>
-
 </div>
 
 &nbsp;<br/>
@@ -58,244 +59,217 @@
 &nbsp;<br/>
 <hr>
 
-<header class="homey-header">
-	<div id="connected_users">
+<div id="connected_users">
 
-		<h1 class="homey-title" data-i18n="settings.connected_users"></h1>
+	<h1 class="homey-title" data-i18n="settings.connected_users"></h1>
 
-		<input class='device_id2 homey-form-input' type='text' value='/register 12345' readonly="readonly"><button class='copy_text2 homey-button-secondary-shadow' data-i18n="settings.copy"></button><br/><br/>
+	<input class="device_id2 homey-form-input" type="text" value="/register 12345" readonly="readonly"><button class="copy_text homey-button-secondary-shadow" data-target=".device_id2" data-i18n="settings.copy"></button><br/><br/>
 
-		<div id="connected_users_list"></div>
-		<button class="homey-button-secondary-shadow reload" data-i18n="settings.reload"></button>
+	<div id="connected_users_list"></div>
+	<button class="homey-button-secondary-shadow reload" data-i18n="settings.reload"></button>
 
+</div>
+
+&nbsp;<br/>
+<hr>
+
+<div id="web_api">
+
+	<h1 class="homey-title" data-i18n="settings.api_title"></h1>
+	<p data-i18n="settings.api_description"></p>
+
+	<div class="homey-form-group">
+		<label class="homey-form-label" for="api_key" data-i18n="settings.api_key"></label>
+		<input class="homey-form-input" id="api_key" type="text" value="" readonly="readonly"><button class="copy_text homey-button-secondary-shadow" data-target="#api_key" data-i18n="settings.copy"></button>
 	</div>
-</header>
+
+	<p id="api_local_wrap" style="display: none"><b data-i18n="settings.api_local"></b>:<br/><span class="api_url" id="api_local"></span></p>
+	<p id="api_cloud_wrap" style="display: none"><b data-i18n="settings.api_cloud"></b>:<br/><span class="api_url" id="api_cloud"></span></p>
+
+	<button id="regenerate_api_key" class="homey-button-secondary-shadow" data-i18n="settings.api_regenerate"></button>
+
+</div>
 
 &nbsp;<br/>
 
-<!--
-<div id="showlog">
-	Log
-	<textarea id="textlog" style="width: 100%" rows="20"></textarea>
-</div>
--->
-
 <script type="text/javascript">
 
-    // Initialize Homey
-    function onHomeyReady(Homey) {
-        Homey.ready();
+	function escape_html(value) {
+		return $('<div>').text(value === undefined || value === null ? '' : String(value)).html();
+	}
 
-		// Fill input with already stored settings
-        Homey.get("device_id", function (err, value) {
-            if (value) {
-                $('.device_id').val('/register ' + value);
-                $('.device_id2').val('/register ' + value);
-            }
-        });
-	    
-	    Homey.get("bot_token", function (err, value) {
-	        
-	        if (value && value != '') {
-		        
-		        $('#already_bot').css('display', 'none');
-				$('#own_bot').css('display', 'none');
-				$('#token').val(value);
-				
-				$('#deletebot').css('display', 'block');
-				
-	        } else {
-		        
-		        $('#already_own_bot').css('display', 'none');
-		        $('#deletebot').css('display', 'none');
-		        
-	        }
-	    });
-	    
-	    Homey.get("chat_ids", function (err, chat_ids) {
-		    
-		    for (var key in chat_ids) {
-			    
-			    var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' #' + chat_ids[key].chat_id + ' ' + chat_ids[key].name + ' ';
-			    if (typeof chat_ids[key].description !== 'undefined') {
-				    
-				    html += ' (Group) ';
-				    
-			    }
-			    html += '</a><br/><br/>';
-				html += '</div>';
-				
-				$('#connected_users_list').append (html);
-				
+	function error_text(err) {
+		return __('settings.error') + ': ' + ((err && err.message) ? err.message : err);
+	}
+
+	function onHomeyReady(Homey) {
+
+		function render_chat_ids(chat_ids) {
+
+			var $list = $('#connected_users_list').empty();
+
+			(chat_ids || []).forEach(function (chat, key) {
+
+				var label = __('settings.delete') + ' #' + chat.chat_id + ' ' + chat.name;
+				if (typeof chat.description !== 'undefined') {
+					label += ' (' + __('settings.group') + ')';
+				}
+
+				$list.append(
+					'<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">'
+					+ escape_html(label) + '</a><br/><br/></div>'
+				);
+			});
+		}
+
+		function load_chat_ids() {
+			Homey.get('chat_ids', function (err, chat_ids) {
+				if (err) return Homey.alert(error_text(err));
+				render_chat_ids(chat_ids);
+			});
+		}
+
+		function show_bot_state(has_bot) {
+			$('#own_bot').toggle(!has_bot);
+			$('#delete_bot').toggle(has_bot);
+		}
+
+		function render_api_info(info) {
+
+			$('#api_key').val(info.api_key || '');
+
+			var example = '?key=' + encodeURIComponent(info.api_key || '') + '&to=<chat_id>&text=Hello';
+
+			if (info.local_url) {
+				$('#api_local').text(info.local_url + example);
+				$('#api_local_wrap').show();
 			}
-		    
+			if (info.cloud_url) {
+				$('#api_cloud').text(info.cloud_url + example);
+				$('#api_cloud_wrap').show();
+			}
+		}
+
+		Homey.get('device_id', function (err, value) {
+			if (value) {
+				$('.device_id').val('/register ' + value);
+				$('.device_id2').val('/register ' + value);
+			}
 		});
+
+		Homey.get('bot_token', function (err, value) {
+			show_bot_state(!!value);
+		});
+
+		load_chat_ids();
+
+		Homey.api('GET', '/api_info', null, function (err, info) {
+			if (err) return Homey.alert(error_text(err));
+			render_api_info(info);
+		});
+
+		Homey.ready();
 
 		$('body').on('click', '.reload', function () {
-
-			Homey.get("chat_ids", function (err, chat_ids) {
-
-				$('#connected_users_list').html('');
-				for (var key in chat_ids) {
-
-					var html = '<div class="span_' + key + '"><a href="#" class="delete homey-button-danger-shadow" data-id="' + key + '">' + __('settings.delete') + ' #' + chat_ids[key].chat_id + ' ' + chat_ids[key].name + ' ';
-					if (typeof chat_ids[key].description !== 'undefined') {
-
-						html += ' (Group) ';
-
-					}
-					html += '</a><br/><br/>';
-					html += '</div>';
-
-					$('#connected_users_list').append (html);
-
-				}
-
-			});
-		})
-
-		$('body').on('click', '.copy_text', function() {
-
-			var copyTextarea = document.querySelector('.device_id');
-			copyTextarea.focus();
-			copyTextarea.select();
-
-			try {
-				var successful = document.execCommand('copy');
-				var msg = successful ? 'successful' : 'unsuccessful';
-				console.log('Copying text command was ' + msg);
-			} catch (err) {
-				console.log('Oops, unable to copy');
-			}
-
-		});
-		$('body').on('click', '.copy_text2', function() {
-
-			var copyTextarea = document.querySelector('.device_id2');
-			copyTextarea.focus();
-			copyTextarea.select();
-
-			try {
-				var successful = document.execCommand('copy');
-				var msg = successful ? 'successful' : 'unsuccessful';
-				console.log('Copying text command was ' + msg);
-			} catch (err) {
-				console.log('Oops, unable to copy');
-			}
-
+			load_chat_ids();
 		});
 
-		$('body').on('click', '.delete', function () {
-			
+		$('body').on('click', '.copy_text', function () {
+
+			// The copy button inside the translated step 7 text has no data-target
+			var $input = $($(this).data('target') || '.device_id').first();
+			var value = $input.val();
+
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				navigator.clipboard.writeText(value).catch(function () {
+					$input.trigger('focus').trigger('select');
+					document.execCommand('copy');
+				});
+			} else {
+				$input.trigger('focus').trigger('select');
+				document.execCommand('copy');
+			}
+		});
+
+		$('body').on('click', '.delete', function (e) {
+
+			e.preventDefault();
 			var remove_key = $(this).data('id');
-			
-			Homey.confirm (__("settings.are_you_sure"), "warning", function(err, result) {
-				
-				if (result) {
-					
-					$('.span_' + remove_key).remove();
-					
-					Homey.get("chat_ids", function (err, chat_ids) {
-						
-						console.log ('chat_ids = ' + JSON.stringify(chat_ids));
 
-						chat_ids.splice(remove_key, 1);
-						
-						console.log ('chat_ids AFTER = ' + JSON.stringify(chat_ids));
-						
-						Homey.set("chat_ids", chat_ids, function() {
-							
-							Homey.api('PUT', '/renew_webhook', {}, function( err, result ) {
-							    
-							    if( err ) return Homey.alert(err);
-							    
-							    //Homey.alert ("result = " + result);
-							    
-							});
+			Homey.confirm(__('settings.are_you_sure'), 'warning', function (err, result) {
 
+				if (!result) return;
+
+				Homey.get('chat_ids', function (err, chat_ids) {
+
+					if (err) return Homey.alert(error_text(err));
+
+					chat_ids = chat_ids || [];
+					chat_ids.splice(remove_key, 1);
+
+					Homey.set('chat_ids', chat_ids, function (err) {
+
+						if (err) return Homey.alert(error_text(err));
+
+						render_chat_ids(chat_ids);
+
+						Homey.api('PUT', '/renew_webhook', {}, function (err) {
+							if (err) return Homey.alert(error_text(err));
 						});
-					
 					});
-				
-				}
-				
+				});
 			});
-			
 		});
 
-		$('body').on('click', '#renewhook', function() {
-			
-			Homey.api('PUT', '/renew_webhook', {}, function( err, result ) {
-							    
-				if( err ) return Homey.alert(err);
-			    
-			    if (result === null) {
-				    
-				    Homey.alert ("success");
-			    
-			    }
-			    
-			});
+		$('#renewhook').on('click', function () {
 
-			
+			Homey.api('PUT', '/renew_webhook', {}, function (err) {
+				if (err) return Homey.alert(error_text(err));
+				Homey.alert(__('settings.renewed'), 'info');
+			});
 		});
-	    
-	    $('#submit').on('click', function() {
 
-			 Homey.api( 'PUT', '/addbot', {
-				 
-				"bot_token": $('#token').val()
-				 
-			}, function( msg, result ){
-				
-				console.log ('msg = ' + msg + ', result = ' + result);
-				
-				if (result) {
-					Homey.set('bot_token', $('#token').val());
-					
-					$('.own_bot_1').css('display', 'none');
-					
-					Homey.alert (__("settings.success"));
-					
-				} else {
-					Homey.alert(msg);
-				}
-				
+		$('#submit').on('click', function () {
+
+			Homey.api('PUT', '/addbot', { bot_token: $('#token').val() }, function (err) {
+
+				if (err) return Homey.alert(error_text(err));
+
+				$('#token').val('');
+				show_bot_state(true);
+				Homey.alert(__('settings.success'), 'info');
 			});
-			
-	    });
-	    
-	    $('#deletebot').on('click', function() {
-		
-			Homey.confirm (__("settings.are_you_sure_bot"), "warning", function(err, result) {
-				
-				if (result) {
-					
-					Homey.api( 'PUT', '/deletebot/', {}, function( msg, result ){
-						
-						console.log (msg + ' / result = ' + result);
-						
-						if (result) {
-							
-							$('#own_bot').css('display', 'block');
-							$('#delete_bot').css('display', 'none');
-							$('#token').val('');
-							
-						} else {
+		});
 
-							alert('Fout: ' + msg);
+		$('#deletebot').on('click', function () {
 
-						}
-						
+			Homey.confirm(__('settings.are_you_sure_bot'), 'warning', function (err, result) {
+
+				if (!result) return;
+
+				Homey.api('PUT', '/deletebot', {}, function (err) {
+					if (err) return Homey.alert(error_text(err));
+					show_bot_state(false);
+				});
+			});
+		});
+
+		$('#regenerate_api_key').on('click', function () {
+
+			Homey.confirm(__('settings.are_you_sure_api_key'), 'warning', function (err, result) {
+
+				if (!result) return;
+
+				Homey.api('PUT', '/regenerate_api_key', {}, function (err) {
+					if (err) return Homey.alert(error_text(err));
+					Homey.api('GET', '/api_info', null, function (err, info) {
+						if (err) return Homey.alert(error_text(err));
+						render_api_info(info);
 					});
-				
-				}
-				
+				});
 			});
-			
-	    });
-
-    }
+		});
+	}
 </script>
 
 </body>

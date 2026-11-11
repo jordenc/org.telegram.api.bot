@@ -9,7 +9,17 @@ Before you can use this app, you first have to follow the steps on the Settings 
 # Built in commands for testing
 - If you send a message with the text 'ping', you should receive 'pong'
 - If you send a message with the text 'pong', you should receive 'ping'
+- '/help' shows the available commands
 
+# Web API
+Send a message from other systems (scripts, Home Assistant, cron jobs, etc.) with a simple HTTP request. The API key and ready-to-use URLs are shown on the settings page.
+
+```
+GET  http://<homey-ip>/api/app/org.telegram.api.bot/send_message?key=<api_key>&to=<chat_id or name>&text=Hello
+POST http://<homey-ip>/api/app/org.telegram.api.bot/send_message   {"key": "<api_key>", "to": "<chat_id or name>", "text": "Hello"}
+```
+
+`to` can be left out when only one user/group is connected. Messages can only be sent to connected users/groups.
 
 # Changelog
 
